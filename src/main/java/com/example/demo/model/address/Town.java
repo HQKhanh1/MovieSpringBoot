@@ -1,8 +1,10 @@
 package com.example.demo.model.address;
 
+import com.example.demo.model.MovieAccount;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Getter
@@ -22,6 +24,10 @@ public class Town {
 
     @Column(name = "genre")
     private String genre;
+
+    @OneToMany(mappedBy = "idTown")
+    @EqualsAndHashCode.Exclude
+    private List<MovieAccount> movieAccounts;
 
     @ManyToOne
     @JoinColumn(name = "id_district")

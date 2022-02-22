@@ -1,10 +1,8 @@
 package com.example.demo.service;
 
 
-import com.example.demo.model.AccountRole;
-
-import java.util.List;
+import com.example.demo.model.MovieAccount;
 
 public interface MovieAccountService {
-    public List<AccountRole> getFullRoleOnAccount(int id);
+    public MovieAccount getFullRoleOnAccount();
 }

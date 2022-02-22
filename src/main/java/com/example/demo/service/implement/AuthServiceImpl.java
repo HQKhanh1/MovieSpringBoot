@@ -1,0 +1,96 @@
+package com.example.demo.service.implement;
+
+import com.example.demo.dto.AuthenticationResponse;
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
+import com.example.demo.model.MovieAccount;
+import com.example.demo.model.VerificationToken;
+import com.example.demo.repository.AccountRoleRepository;
+import com.example.demo.repository.MovieAccountRepository;
+import com.example.demo.repository.VerificationTokenRepository;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.AuthService;
+import com.example.demo.service.RoleForAccountService;
+import com.example.demo.service.SendMailService;
+import com.example.demo.util.AppConstants;
+import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.util.UUID;
+
+@Service
+@AllArgsConstructor
+public class AuthServiceImpl implements AuthService {
+    private final PasswordEncoder passwordEncoder;
+    private final MovieAccountRepository movieAccountRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
+    private final SendMailService sendMailService;
+    private final RoleForAccountService roleForAccountService;
+    private final AccountRoleRepository accountRoleRepository;
+    private final AuthenticationManager  authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    @Override
+    @Transactional
+    public void signup(RegisterRequest registerRequest) {
+        MovieAccount user = new MovieAccount();
+        user.setUsername(registerRequest.getUsername());
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setEmail(registerRequest.getEmail());
+        user.setLastname(registerRequest.getLastname());
+        user.setFirstname(registerRequest.getFirstname());
+        user.setBirthday(registerRequest.getBirthday());
+        user.setGender(registerRequest.isGender());
+        user.setAvatar(registerRequest.getAvatar());
+        user.setIdTown(registerRequest.getIdTown());
+        user.setAddress(registerRequest.getAddress());
+        user.setEnabled(false);
+        movieAccountRepository.save(user);
+
+        roleForAccountService.addRoleForAccount(
+                movieAccountRepository.findMovieAccountByUsername(registerRequest.getUsername()),
+                accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_ADMIN));
+        String token = generateVerificationToken(user);
+        sendMailService.signup(user, token);
+    }
+
+    @Override
+    public void verifyAccount(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByTokenContent(token);
+        fetchUserAndEnable(verificationToken);
+    }
+    @Override
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+        System.out.println("\n\n\n\n\n\n hello \n\n\n\n\n");
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
+
+        System.out.println("\n\n\n\n\n\n hello1 \n\n\n\n\n");
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtTokenProvider.generateToken(authenticate);
+        return new AuthenticationResponse(token, loginRequest.getUsername());
+    }
+
+    @Transactional
+    public void fetchUserAndEnable(VerificationToken verificationToken) {
+        MovieAccount movieAccount = verificationToken.getMovieAccountInToken();
+        movieAccount.setEnabled(true);
+        movieAccountRepository.save(movieAccount);
+    }
+
+    private String generateVerificationToken(MovieAccount user) {
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setTokenContent(token);
+        verificationToken.setMovieAccountInToken(user);
+        verificationToken.setCreatedTime(Instant.now());
+        verificationTokenRepository.save(verificationToken);
+        return token;
+    }
+}

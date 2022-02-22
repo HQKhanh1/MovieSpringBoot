@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.model.address.Town;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,7 +35,7 @@ public class MovieAccount {
 
     @Column(name = "email")
     @NotBlank(message = "Email cannot be empty")
-    @Pattern(regexp = "^[\\\\w.+\\\\-]+@gmail\\\\.com$", message = "Invalid email")
+    @Pattern(regexp = "^[a-z0-9](.?[a-z0-9]){0,}@g(oogle)?mail.com$", message = "Invalid email")
     private String email;
 
     @Column(name = "avatar")
@@ -52,11 +53,13 @@ public class MovieAccount {
     @NotNull(message = "Birthday cannot be empty")
     private Date birthday;
 
-    @Column(name = "id_commune_ward_town")
-    private int idTown;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_commune_ward_town")
+    @EqualsAndHashCode.Exclude
+    private Town idTown;
 
     @Column(name = "address_detail")
-    private  String address;
+    private String address;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -65,18 +68,19 @@ public class MovieAccount {
     @NotNull(message = "Gender cannot be empty")
     private boolean gender;
 
-    @ManyToMany(mappedBy = "rolesForAccount", fetch = FetchType.LAZY)
-    List<AccountRole> accountRoles;
+    @OneToMany(mappedBy = "movieAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    private List<RoleForAccount> accountRoles;
 
-    @OneToMany(mappedBy = "movieAccountInToken", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movieAccountInToken", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private List<VerificationToken> verificationTokens;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private List<UserHistory> userHistories;
 
-    @OneToMany(mappedBy = "movieAccountDetail", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movieAccountDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private List<MovieEvaluate> movieEvaluates;
 
