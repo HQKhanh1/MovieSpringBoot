@@ -67,11 +67,8 @@ public class AuthServiceImpl implements AuthService {
     }
     @Override
     public AuthenticationResponse login(LoginRequest loginRequest) {
-        System.out.println("\n\n\n\n\n\n hello \n\n\n\n\n");
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
-
-        System.out.println("\n\n\n\n\n\n hello1 \n\n\n\n\n");
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtTokenProvider.generateToken(authenticate);
         return new AuthenticationResponse(token, loginRequest.getUsername());
