@@ -1,8 +1,9 @@
 package com.example.demo.service.implement;
 
-import com.example.demo.model.MovieAccount;
-import com.example.demo.repository.MovieAccountRepository;
+import com.example.demo.model.Account;
+import com.example.demo.repository.AccountRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,25 +17,25 @@ import java.util.Collection;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final MovieAccountRepository movieAccountRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MovieAccount movieAccount = movieAccountRepository.findMovieAccountByUsername((username));
-        if (movieAccount == null) {
+        Account account = accountRepository.findMovieAccountByUsername((username));
+        if (account == null) {
             throw new UsernameNotFoundException("User not Found with username: " + username);
         } else {
             Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-            movieAccount.getAccountRoles().forEach(role -> {
-                System.out.printf("\n\n\n\n Role: "+role.getAccountRole().getName());
+            account.getAccountRoles().forEach(role -> {
                 authorities.add(new SimpleGrantedAuthority(role.getAccountRole().getName()));
             });
             return new User(
-                    movieAccount.getUsername(),
-                    movieAccount.getPassword(),
-                    movieAccount.isEnabled(),
+                    account.getUsername(),
+                    account.getPassword(),
+                    account.isEnabled(),
                     true,
                     true,
                     true,

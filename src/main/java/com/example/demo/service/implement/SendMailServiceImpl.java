@@ -1,6 +1,6 @@
 package com.example.demo.service.implement;
 
-import com.example.demo.model.MovieAccount;
+import com.example.demo.model.Account;
 import com.example.demo.payload.DataMailDTO;
 import com.example.demo.service.MailService;
 import com.example.demo.service.SendMailService;
@@ -18,7 +18,7 @@ public class SendMailServiceImpl implements SendMailService {
     private final MailService mailService;
 
     @Override
-    public Boolean signup(MovieAccount sdi, String token) {
+    public Boolean signup(Account sdi, String token) {
         try {
             DataMailDTO dataMail = new DataMailDTO();
 
@@ -39,7 +39,7 @@ public class SendMailServiceImpl implements SendMailService {
         return false;
     }
     @Override
-    public Boolean create(MovieAccount sdi, String password) {
+    public Boolean create(Account sdi, String password) {
         try {
             DataMailDTO dataMail = new DataMailDTO();
 
@@ -61,7 +61,7 @@ public class SendMailServiceImpl implements SendMailService {
         return false;
     }
     @Override
-    public void forgotPassword(MovieAccount sdi, String password) {
+    public void forgotPassword(Account sdi, String password) {
         try {
             DataMailDTO dataMail = new DataMailDTO();
 

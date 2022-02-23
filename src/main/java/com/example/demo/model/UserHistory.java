@@ -22,7 +22,7 @@ public class UserHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "id_user")
-    private MovieAccount user;
+    private Account user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude

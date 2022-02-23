@@ -1,4 +1,4 @@
-package com.example.demo.payload;
+package com.example.demo.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +9,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-    private List<UserDto> users;
+public class AccountResponse {
+    private List<AccountDTO> accountDTOS;
     private int pageNo;
     private int pageSize;
     private long totalElements;
     private int totalPages;
+    private boolean first;
     private boolean last;
 }

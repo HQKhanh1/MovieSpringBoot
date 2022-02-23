@@ -18,7 +18,7 @@ public class MovieEvaluate {
     @MapsId("userId")
     @JoinColumn(name = "idUser")
     @EqualsAndHashCode.Exclude
-    private MovieAccount movieAccountDetail;
+    private Account accountDetail;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

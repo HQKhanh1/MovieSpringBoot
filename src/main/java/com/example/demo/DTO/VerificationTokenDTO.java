@@ -1,11 +1,11 @@
-package com.example.demo.dto;
+package com.example.demo.DTO;
 
 import java.time.Instant;
 
 public class VerificationTokenDTO {
     private int id;
 
-    private MovieAccountDTO movieAccountInToken;
+    private AccountDTO movieAccountInToken;
 
     private Instant createdTime;
 

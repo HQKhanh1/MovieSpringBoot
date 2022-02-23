@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,4 +12,5 @@ public class AuthenticationResponse {
 //    private String refreshToken;
 //    private Instant expiresAt;
     private String username;
+//    private List<AccountRoleDTO> accountRoleDTOS;
 }

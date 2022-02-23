@@ -1,6 +1,6 @@
-package com.example.demo.dto;
+package com.example.demo.DTO;
 
-import com.example.demo.model.MovieAccount;
+import com.example.demo.model.Account;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,12 +13,11 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
-    private MovieAccount movieAccount;
+    private Account account;
 
-    public static CustomUserDetails build(MovieAccount user) {
+    public static CustomUserDetails build(Account user) {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getAccountRoles().forEach(role -> {
-            System.out.println("\n\n Name role: " + role.getAccountRole().getName());
             authorities.add(new SimpleGrantedAuthority(role.getAccountRole().getName()));
         });
         return new CustomUserDetails(user);
@@ -26,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        movieAccount.getAccountRoles().forEach(role -> {
+        account.getAccountRoles().forEach(role -> {
             System.out.println("\n\n Name role: " + role.getAccountRole().getName());
             authorities.add(new SimpleGrantedAuthority(role.getAccountRole().getName()));
         });
@@ -35,12 +34,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return movieAccount.getPassword();
+        return account.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return movieAccount.getUsername();
+        return account.getUsername();
     }
 
     @Override
@@ -60,6 +59,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return movieAccount.isEnabled();
+        return account.isEnabled();
     }
 }

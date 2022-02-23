@@ -1,12 +1,12 @@
 package com.example.demo.service.implement;
 
-import com.example.demo.dto.AuthenticationResponse;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.model.MovieAccount;
+import com.example.demo.DTO.AuthenticationResponse;
+import com.example.demo.DTO.LoginRequest;
+import com.example.demo.DTO.RegisterRequest;
+import com.example.demo.model.Account;
 import com.example.demo.model.VerificationToken;
+import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.AccountRoleRepository;
-import com.example.demo.repository.MovieAccountRepository;
 import com.example.demo.repository.VerificationTokenRepository;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.AuthService;
@@ -29,7 +29,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
-    private final MovieAccountRepository movieAccountRepository;
+    private final AccountRepository accountRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final SendMailService sendMailService;
     private final RoleForAccountService roleForAccountService;
@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void signup(RegisterRequest registerRequest) {
-        MovieAccount user = new MovieAccount();
+        Account user = new Account();
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
@@ -51,11 +51,11 @@ public class AuthServiceImpl implements AuthService {
         user.setIdTown(registerRequest.getIdTown());
         user.setAddress(registerRequest.getAddress());
         user.setEnabled(false);
-        movieAccountRepository.save(user);
+        accountRepository.save(user);
 
         roleForAccountService.addRoleForAccount(
-                movieAccountRepository.findMovieAccountByUsername(registerRequest.getUsername()),
-                accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_ADMIN));
+                accountRepository.findMovieAccountByUsername(registerRequest.getUsername()),
+                accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_USER));
         String token = generateVerificationToken(user);
         sendMailService.signup(user, token);
     }
@@ -76,16 +76,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public void fetchUserAndEnable(VerificationToken verificationToken) {
-        MovieAccount movieAccount = verificationToken.getMovieAccountInToken();
-        movieAccount.setEnabled(true);
-        movieAccountRepository.save(movieAccount);
+        Account account = verificationToken.getAccountInToken();
+        account.setEnabled(true);
+        accountRepository.save(account);
     }
 
-    private String generateVerificationToken(MovieAccount user) {
+    private String generateVerificationToken(Account user) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setTokenContent(token);
-        verificationToken.setMovieAccountInToken(user);
+        verificationToken.setAccountInToken(user);
         verificationToken.setCreatedTime(Instant.now());
         verificationTokenRepository.save(verificationToken);
         return token;

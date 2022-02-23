@@ -21,7 +21,7 @@ public class VerificationToken {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
     @EqualsAndHashCode.Exclude
-    private MovieAccount movieAccountInToken;
+    private Account accountInToken;
 
     @Column(name = "create_time")
     private Instant createdTime;

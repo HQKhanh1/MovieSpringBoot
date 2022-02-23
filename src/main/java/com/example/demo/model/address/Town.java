@@ -1,6 +1,6 @@
 package com.example.demo.model.address;
 
-import com.example.demo.model.MovieAccount;
+import com.example.demo.model.Account;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,7 +27,7 @@ public class Town {
 
     @OneToMany(mappedBy = "idTown")
     @EqualsAndHashCode.Exclude
-    private List<MovieAccount> movieAccounts;
+    private List<Account> accounts;
 
     @ManyToOne
     @JoinColumn(name = "id_district")

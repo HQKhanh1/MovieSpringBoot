@@ -21,7 +21,7 @@ public class RoleForAccount {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("accountId")
     @JoinColumn(name = "id_acc")
-    private MovieAccount movieAccount;
+    private Account account;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("roleId")

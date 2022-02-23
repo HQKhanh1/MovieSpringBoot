@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.DTO;
 
 import com.example.demo.model.Key.MovieEvaluateKey;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.Date;
 public class MovieEvaluateDTO {
     MovieEvaluateKey id;
     //    @ManyToOne(fetch = FetchType.LAZY)
-    private MovieAccountDTO movieAccountDetail;
+    private AccountDTO movieAccountDetail;
     //    @ManyToOne(fetch = FetchType.LAZY)
     private MovieDetailDTO movieDetail;
     private Date evaluateTime;

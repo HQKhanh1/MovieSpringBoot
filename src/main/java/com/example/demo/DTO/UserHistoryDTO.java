@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.util.Date;
 public class UserHistoryDTO {
     private int id;
 //    @ManyToOne(fetch = FetchType.LAZY)
-    private MovieAccountDTO user;
+    private AccountDTO user;
 //    @ManyToOne(fetch = FetchType.LAZY)
     private MovieDetailDTO movie;
     private Date historyDate;

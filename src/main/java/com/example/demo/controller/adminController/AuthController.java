@@ -1,10 +1,9 @@
-package com.example.demo.controller;
+package com.example.demo.controller.adminController;
 
-import com.example.demo.dto.AuthenticationResponse;
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
+import com.example.demo.DTO.AuthenticationResponse;
+import com.example.demo.DTO.LoginRequest;
+import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.service.AuthService;
-import com.example.demo.service.RoleForAccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/api/admin/auth")
 public class AuthController {
     private final AuthService authService;
-    private final RoleForAccountService roleForAccountService;
-
-    @GetMapping("/1")
-    public ResponseEntity<String> test() {
-        return new ResponseEntity<>("hello",HttpStatus.OK);
-    }
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
@@ -36,6 +29,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
-        return new ResponseEntity<AuthenticationResponse>(authService.login(loginRequest), HttpStatus.OK);
+        return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.OK);
     }
 }

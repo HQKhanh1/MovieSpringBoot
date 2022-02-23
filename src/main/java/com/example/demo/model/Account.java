@@ -16,13 +16,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "movie_account")
-public class MovieAccount {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_acc_id")
     private int id;
 
-    @Column(name = "acc_name")
+    @Column(name = "acc_name", unique = true)
     @NotBlank(message ="Username cannot be empty")
     private String username;
 
@@ -33,7 +33,7 @@ public class MovieAccount {
     @Column(name = "enabled", nullable = false)
     private boolean enabled;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @NotBlank(message = "Email cannot be empty")
     @Pattern(regexp = "^[a-z0-9](.?[a-z0-9]){0,}@g(oogle)?mail.com$", message = "Invalid email")
     private String email;
@@ -68,11 +68,11 @@ public class MovieAccount {
     @NotNull(message = "Gender cannot be empty")
     private boolean gender;
 
-    @OneToMany(mappedBy = "movieAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private List<RoleForAccount> accountRoles;
 
-    @OneToMany(mappedBy = "movieAccountInToken", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accountInToken", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private List<VerificationToken> verificationTokens;
 
@@ -80,7 +80,7 @@ public class MovieAccount {
     @EqualsAndHashCode.Exclude
     private List<UserHistory> userHistories;
 
-    @OneToMany(mappedBy = "movieAccountDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accountDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     private List<MovieEvaluate> movieEvaluates;
 
