@@ -62,30 +62,15 @@ public class MovieDetail {
     @EqualsAndHashCode.Exclude
     private List<MovieEvaluate> movieEvaluates;
 
-    @ManyToMany
-    @JoinTable(
-            name = "fk_cast",
-            joinColumns = @JoinColumn(name = "moive_id"),
-            inverseJoinColumns = @JoinColumn(name = "cast_id")
-    )
-    private List<MovieCast> movieCasts;
-
-    @ManyToMany
-    @JoinTable(
-            name = "fk_genre",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
-    )
+    @OneToMany(mappedBy = "movieDetail", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<MovieGenre> movieGenres;
+    private List<FKCast> fkCasts;
 
-    @ManyToMany
-    @JoinTable(
-            name = "fk_driector",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "dricetor_id")
-    )
+    @OneToMany(mappedBy = "movieDetail", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<MovieDirector> movieDirectors;
+    private List<FKGenre> fkGenres;
 
+    @OneToMany(mappedBy = "movieDetail", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    private List<FKDirector> fkDirectors;
 }

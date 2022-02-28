@@ -20,6 +20,8 @@ public interface AccountService {
     Account getAccountByUsername(String accountUsername);
     boolean checkPasswordForAccount(Account account, String currentPassword);
     String changePasswordForAccount(Account account, String passwordChange);
+    String deleteAccountByUsername(String username);
+    String editAccountByUsername(AccountDTO accountDTO) throws UsernameExitException, MailException;
     String createAccount(RegisterRequest registerRequest, int roleId) throws MailException, UsernameExitException;
     AccountResponse getAllUsersPage(int pageNo, int pageSize, String sortBy, String sortDir);
 

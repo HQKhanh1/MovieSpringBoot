@@ -13,4 +13,12 @@ public class TownMap {
             return new TownDTO(town.getId(), town.getName(), town.getGenre());
         }
     }
+
+    public Town DTOToTown(TownDTO townDTO) {
+        Town town = new Town();
+        town.setId(townDTO.getId());
+        town.setGenre(townDTO.getGenre());
+        town.setName(townDTO.getName());
+        return town;
+    }
 }

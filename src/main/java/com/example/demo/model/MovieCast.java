@@ -30,7 +30,7 @@ public class MovieCast {
     @Column(name = "story")
     private String story;
 
-    @ManyToMany(mappedBy = "movieCasts")
+    @OneToMany(mappedBy = "movieCast", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<MovieDetail> movieDetails;
+    private List<FKCast> fkCasts;
 }

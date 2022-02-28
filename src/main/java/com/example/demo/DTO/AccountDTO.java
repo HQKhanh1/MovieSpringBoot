@@ -24,11 +24,4 @@ public class AccountDTO {
     private String address;
     private String phoneNumber;
     private boolean gender;
-    public String getGender() {
-        if (gender) {
-            return "Male";
-        } else {
-            return "Female";
-        }
-    }
 }

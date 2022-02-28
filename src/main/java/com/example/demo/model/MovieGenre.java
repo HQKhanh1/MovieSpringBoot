@@ -22,7 +22,7 @@ public class MovieGenre {
     @NotBlank(message = "Movie's genre cannot be empty")
     private String name;
 
-    @ManyToMany(mappedBy = "movieGenres")
+    @OneToMany(mappedBy = "movieGenre", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<MovieDetail> movieDetails;
+    private List<FKGenre> fkGenres;
 }

@@ -29,7 +29,7 @@ public class MovieDirector {
     @Column(name = "story")
     private String story;
 
-    @ManyToMany(mappedBy = "movieDirectors")
+    @OneToMany(mappedBy = "movieDirector", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<MovieDetail> movieDetails;
+    private List<FKDirector> fkDirectors;
 }

@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.model.Key.MovieEvaluateKey;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,21 +9,25 @@ import javax.validation.constraints.PastOrPresent;
 import java.util.Date;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "move_evaluate")
 public class MovieEvaluate {
     @EmbeddedId
-    MovieEvaluateKey id;
+    private MovieEvaluateKey id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
-    @JoinColumn(name = "idUser")
+    @JoinColumn(name = "id_user")
     @EqualsAndHashCode.Exclude
     private Account accountDetail;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("movieId")
-    @JoinColumn(name = "idMovie")
+    @JoinColumn(name = "id_movie")
     @EqualsAndHashCode.Exclude
     private MovieDetail movieDetail;
 

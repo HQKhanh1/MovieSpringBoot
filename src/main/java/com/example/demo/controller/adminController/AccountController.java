@@ -28,11 +28,6 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
 
-    @GetMapping("/getAcc")
-    public void getAllUser() {
-
-    }
-
     @GetMapping("/page")
     public AccountResponse getAllUsers(
             @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
@@ -45,9 +40,9 @@ public class AccountController {
 
     @PostMapping("/createAcc/{roleId}")
     public ResponseEntity<String> createNewAccount(@RequestBody @Valid RegisterRequest registerRequest, @PathVariable int roleId, BindingResult bindingResult) throws UsernameExitException, MailException {
-        if (!bindingResult.hasErrors()){
+        if (!bindingResult.hasErrors()) {
             return new ResponseEntity<>(accountService.createAccount(registerRequest, roleId), HttpStatus.OK);
-        }else {
+        } else {
             throw new RuntimeException("Not valid");
         }
     }
@@ -56,17 +51,26 @@ public class AccountController {
     public ResponseEntity<List<AccountDTO>> getAccEnabled(@RequestBody CheckEnabled check) {
         return new ResponseEntity<>(accountService.getAccountByEnabled(check.isCheckEnabled()), HttpStatus.OK);
     }
+    @PutMapping("/edit")
+    public ResponseEntity<String> editAccountByUsername(@RequestBody AccountDTO accountDTO) throws UsernameExitException, MailException {
+        return new ResponseEntity<>(accountService.editAccountByUsername(accountDTO), HttpStatus.OK);
+    }
+    @DeleteMapping("/deleteAcc/{username}")
+    public ResponseEntity<String> deleteAccountByUsername(@PathVariable String username){
+        return new ResponseEntity<>(accountService.deleteAccountByUsername(username), HttpStatus.OK);
+    }
     @PostMapping("/checkPassword/{username}")
-    public ResponseEntity<Boolean> checkPassword(@RequestBody Password password, @PathVariable String username){
+    public ResponseEntity<Boolean> checkPassword(@RequestBody Password password, @PathVariable String username) {
         Account account = accountService.getAccountByUsername(username);
         return new ResponseEntity<>(accountService.checkPasswordForAccount(account, password.getPassword()), HttpStatus.OK);
     }
 
     @PostMapping("/changePassword/{username}")
-    public ResponseEntity<String> changePassword(@RequestBody Password password, @PathVariable String username){
+    public ResponseEntity<String> changePassword(@RequestBody Password password, @PathVariable String username) {
         Account account = accountService.getAccountByUsername(username);
         return new ResponseEntity<>(accountService.changePasswordForAccount(account, password.getPassword()), HttpStatus.OK);
     }
+
     public HttpHeaders returnHttpHeaders(PagingResponse response) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(PagingHeaders.COUNT.getName(), String.valueOf(response.getCount()));

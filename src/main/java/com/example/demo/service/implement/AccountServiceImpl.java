@@ -11,9 +11,7 @@ import com.example.demo.model.Account;
 import com.example.demo.model.AccountRole;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.AccountRoleRepository;
-import com.example.demo.service.AccountService;
-import com.example.demo.service.RoleForAccountService;
-import com.example.demo.service.SendMailService;
+import com.example.demo.service.*;
 import com.example.demo.util.AppConstants;
 import com.example.demo.util.DataUtils;
 import lombok.AllArgsConstructor;
@@ -36,6 +34,9 @@ public class AccountServiceImpl implements AccountService {
     private final RoleForAccountService roleForAccountService;
     private final AccountRoleRepository accountRoleRepository;
     private final SendMailService sendMailService;
+    private final UserHistoryService userHistoryService;
+    private final VerificationTokenService verificationTokenService;
+    private final MovieEvaluateService movieEvaluateService;
 
     @Override
     public List<AccountDTO> getAllAccounts() {
@@ -87,9 +88,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountByUsername(String accountUsername) {
         Account account = accountRepository.findMovieAccountByUsername(accountUsername);
-        if (account == null){
+        if (account == null) {
             throw new AccountExeption("Account not found");
-        }else {
+        } else {
             return account;
         }
     }
@@ -98,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
     public boolean checkPasswordForAccount(Account account, String currentPassword) {
         if (account == null) {
             throw new AccountExeption("Account not found");
-        }else {
+        } else {
             return passwordEncoder.matches(currentPassword, account.getPassword());
         }
     }
@@ -108,6 +109,39 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(passwordEncoder.encode(passwordHadChange));
         accountRepository.save(account);
         return "Change password have successfully";
+    }
+
+    @Override
+    public String deleteAccountByUsername(String username) {
+        Account account = accountRepository.findMovieAccountByUsername(username);
+        if (account == null) {
+            throw new AccountExeption("Account not found with username: " + username);
+        } else {
+            int id = account.getId();
+            userHistoryService.deleteUserHistoryFromAccount(id);
+            verificationTokenService.deleteUserTokens(id);
+            movieEvaluateService.deleteMovieEvaluateByUserId(id);
+            roleForAccountService.deleteRole(id);
+            accountRepository.delete(account);
+            return "Remove Account Successfully";
+        }
+    }
+
+    @Override
+    public String editAccountByUsername(AccountDTO accountDTO) throws UsernameExitException, MailException {
+        Account account = accountRepository.findMovieAccountByUsername(accountDTO.getUsername());
+        if (account == null) {
+            throw new AccountExeption("Account not found with username: " + accountDTO.getUsername());
+        } else {
+            if (checkUsername(accountDTO.getUsername()) == false && checkEmail(accountDTO.getUsername()) == false) {
+                accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
+                account = accountMap.DTOToAccount(accountDTO);
+                accountRepository.save(account);
+                return "Edit info account successfully";
+            } else {
+                return "Fail";
+            }
+        }
     }
 
     @Override
@@ -126,6 +160,7 @@ public class AccountServiceImpl implements AccountService {
             account.setIdTown(registerRequest.getIdTown());
             account.setAddress(registerRequest.getAddress());
             account.setEnabled(true);
+            accountRepository.save(account);
             sendMailService.create(account, account.getPassword());
             account.setPassword(passwordEncoder.encode(account.getPassword()));
             accountRepository.save(account);
