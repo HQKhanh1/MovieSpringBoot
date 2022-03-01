@@ -1,7 +1,7 @@
-package com.example.demo.controller.adminController;
+package com.example.demo.controller;
 
 import com.example.demo.DTO.AccountDTO;
-import com.example.demo.DTO.AccountResponse;
+import com.example.demo.DTO.AccountPage;
 import com.example.demo.DTO.Password;
 import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.exception.MailException;
@@ -29,12 +29,7 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping("/page")
-    public AccountResponse getAllUsers(
-            @RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir
-    ) {
+    public AccountPage getAllUsers(@RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo, @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize, @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy, @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
         return accountService.getAllUsersPage(pageNo, pageSize, sortBy, sortDir);
     }
 
@@ -51,14 +46,17 @@ public class AccountController {
     public ResponseEntity<List<AccountDTO>> getAccEnabled(@RequestBody CheckEnabled check) {
         return new ResponseEntity<>(accountService.getAccountByEnabled(check.isCheckEnabled()), HttpStatus.OK);
     }
+
     @PutMapping("/edit")
     public ResponseEntity<String> editAccountByUsername(@RequestBody AccountDTO accountDTO) throws UsernameExitException, MailException {
         return new ResponseEntity<>(accountService.editAccountByUsername(accountDTO), HttpStatus.OK);
     }
+
     @DeleteMapping("/deleteAcc/{username}")
-    public ResponseEntity<String> deleteAccountByUsername(@PathVariable String username){
+    public ResponseEntity<String> deleteAccountByUsername(@PathVariable String username) {
         return new ResponseEntity<>(accountService.deleteAccountByUsername(username), HttpStatus.OK);
     }
+
     @PostMapping("/checkPassword/{username}")
     public ResponseEntity<Boolean> checkPassword(@RequestBody Password password, @PathVariable String username) {
         Account account = accountService.getAccountByUsername(username);

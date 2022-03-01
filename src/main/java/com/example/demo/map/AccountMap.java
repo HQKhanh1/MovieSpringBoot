@@ -13,7 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class AccountMap {
     private final TownMap townMap;
-    public AccountDTO accountToDTO(Account account){
+
+    public AccountDTO accountToDTO(Account account) {
         return new AccountDTO(account.getId(),
                 account.getUsername(),
                 account.getPassword(),
@@ -28,7 +29,8 @@ public class AccountMap {
                 account.getPhoneNumber(),
                 account.isGender());
     }
-    public Account DTOToAccount(AccountDTO accountDTO){
+
+    public Account DTOToAccount(AccountDTO accountDTO) {
         Account account = new Account();
         account.setUsername(accountDTO.getUsername());
         account.setPassword(accountDTO.getPassword());
@@ -44,7 +46,8 @@ public class AccountMap {
         account.setGender(accountDTO.isGender());
         return account;
     }
-    public List<AccountDTO> listAccountToListDTO(List<Account> accounts){
+
+    public List<AccountDTO> listAccountToListDTO(List<Account> accounts) {
         List<AccountDTO> accountDTOS = new ArrayList<>();
         accounts.forEach(account -> {
             accountDTOS.add(this.accountToDTO(account));

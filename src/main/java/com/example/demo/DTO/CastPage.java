@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountResponse {
-    private List<AccountDTO> accountDTOS;
+public class CastPage {
+    private List<MovieCastDTO> movieCastDTOS;
     private int pageNo;
     private int pageSize;
     private long totalElements;

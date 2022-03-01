@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "movie_genre")
+@Table(name = "movie_cast")
 public class MovieCast {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,10 @@ public class MovieCast {
 
     @Column(name = "story")
     private String story;
+
+    @Column(name = "birthday")
+    @NotNull(message = "Cast's birthday cannot be empty")
+    private Date birthday;
 
     @OneToMany(mappedBy = "movieCast", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude

@@ -1,4 +1,4 @@
-package com.example.demo.service.implement;
+package com.example.demo.service.IMPL;
 
 import com.example.demo.model.Account;
 import com.example.demo.payload.DataMailDTO;
@@ -28,7 +28,7 @@ public class SendMailServiceImpl implements SendMailService {
             Map<String, Object> props = new HashMap<>();
             props.put("firstname", sdi.getFirstname());
             props.put("lastname", sdi.getLastname());
-            props.put("token", "http://localhost:8080/api/auth/accountVerification/"+token);
+            props.put("token", "http://localhost:8080/api/auth/accountVerification/" + token);
             dataMail.setProps(props);
 
             mailService.sendHtmlMail(dataMail, Const.TEMPLATE_FILE_NAME.CLIENT_REGISTER);
@@ -38,6 +38,7 @@ public class SendMailServiceImpl implements SendMailService {
         }
         return false;
     }
+
     @Override
     public Boolean create(Account sdi, String password) {
         try {
@@ -60,6 +61,7 @@ public class SendMailServiceImpl implements SendMailService {
         }
         return false;
     }
+
     @Override
     public void forgotPassword(Account sdi, String password) {
         try {

@@ -23,11 +23,11 @@ public class Account {
     private int id;
 
     @Column(name = "acc_name", unique = true)
-    @NotBlank(message ="Username cannot be empty")
+    @NotBlank(message = "Username cannot be empty")
     private String username;
 
     @Column(name = "acc_password")
-    @NotBlank(message ="Password cannot be empty")
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
     @Column(name = "enabled", nullable = false)

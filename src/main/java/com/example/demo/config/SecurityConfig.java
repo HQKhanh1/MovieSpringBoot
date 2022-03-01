@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
+
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -42,13 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/admin/auth/login").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/admin/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/admin/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/admin/auth/login").permitAll()
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class);
     }
+
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationResponse {
     private String authenticationToken;
-//    private String refreshToken;
+    //    private String refreshToken;
 //    private Instant expiresAt;
     private String username;
 //    private List<AccountRoleDTO> accountRoleDTOS;

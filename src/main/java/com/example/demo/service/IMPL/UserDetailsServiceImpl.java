@@ -1,4 +1,4 @@
-package com.example.demo.service.implement;
+package com.example.demo.service.IMPL;
 
 import com.example.demo.model.Account;
 import com.example.demo.repository.AccountRepository;

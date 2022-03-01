@@ -1,6 +1,7 @@
 package com.example.demo.util;
 
 import java.util.Random;
+
 public class DataUtils {
     public static String generateTempPwd(int length) {
         String numbers = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

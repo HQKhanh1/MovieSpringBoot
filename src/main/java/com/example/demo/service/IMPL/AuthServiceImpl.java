@@ -1,4 +1,4 @@
-package com.example.demo.service.implement;
+package com.example.demo.service.IMPL;
 
 import com.example.demo.DTO.AuthenticationResponse;
 import com.example.demo.DTO.LoginRequest;
@@ -34,8 +34,9 @@ public class AuthServiceImpl implements AuthService {
     private final SendMailService sendMailService;
     private final RoleForAccountService roleForAccountService;
     private final AccountRoleRepository accountRoleRepository;
-    private final AuthenticationManager  authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+
     @Override
     @Transactional
     public void signup(RegisterRequest registerRequest) {
@@ -65,10 +66,11 @@ public class AuthServiceImpl implements AuthService {
         VerificationToken verificationToken = verificationTokenRepository.findByTokenContent(token);
         fetchUserAndEnable(verificationToken);
     }
+
     @Override
     public AuthenticationResponse login(LoginRequest loginRequest) {
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtTokenProvider.generateToken(authenticate);
         return new AuthenticationResponse(token, loginRequest.getUsername());

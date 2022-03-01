@@ -1,4 +1,4 @@
-package com.example.demo.service.implement.address;
+package com.example.demo.service.IMPL.address;
 
 import com.example.demo.service.addressService.DistrictService;
 import lombok.AllArgsConstructor;

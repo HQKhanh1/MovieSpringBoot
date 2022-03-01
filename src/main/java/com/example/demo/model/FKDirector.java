@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "fk_genre")
+@Table(name = "fk_director")
 public class FKDirector {
     @EmbeddedId
     private FkDirectorKey id;

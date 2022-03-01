@@ -1,4 +1,4 @@
-package com.example.demo.service.implement;
+package com.example.demo.service.IMPL;
 
 import com.example.demo.payload.DataMailDTO;
 import com.example.demo.service.MailService;

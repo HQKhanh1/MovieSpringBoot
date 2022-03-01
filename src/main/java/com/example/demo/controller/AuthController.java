@@ -1,4 +1,4 @@
-package com.example.demo.controller.adminController;
+package com.example.demo.controller;
 
 import com.example.demo.DTO.AuthenticationResponse;
 import com.example.demo.DTO.LoginRequest;

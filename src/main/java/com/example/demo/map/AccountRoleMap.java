@@ -12,7 +12,8 @@ public class AccountRoleMap {
     public AccountRoleDTO accountRoleToDTO(AccountRole accountRole) {
         return new AccountRoleDTO(accountRole.getId(), accountRole.getName());
     }
-    public List<AccountRoleDTO> listAccountToDTO(List<AccountRole> accountRoles){
+
+    public List<AccountRoleDTO> listAccountToDTO(List<AccountRole> accountRoles) {
         List<AccountRoleDTO> accountRoleDTOS = new ArrayList<>();
         accountRoles.forEach(accountRole -> {
             accountRoleDTOS.add(accountRoleToDTO(accountRole));

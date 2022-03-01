@@ -1,4 +1,4 @@
-package com.example.demo.service.implement;
+package com.example.demo.service.IMPL;
 
 import com.example.demo.model.AccountRole;
 import com.example.demo.model.Key.RoleForAccountKey;
@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoleForAccountServiceImpl implements RoleForAccountService {
     private final RoleForAccountRepository roleForAccountRepository;
+
     @Override
     public void addRoleForAccount(Account account, AccountRole accountRole) {
         RoleForAccountKey roleForAccountKey = new RoleForAccountKey();
@@ -26,11 +27,12 @@ public class RoleForAccountServiceImpl implements RoleForAccountService {
         roleForAccount.setAccount(account);
         roleForAccountRepository.save(roleForAccount);
     }
+
     @Override
-    public void deleteRole(int userId){
+    public void deleteRole(int userId) {
         List<RoleForAccount> roleForAccounts = roleForAccountRepository.findAll();
         roleForAccounts.forEach(roleForAccount -> {
-            if(roleForAccount.getAccount().getId() == userId){
+            if (roleForAccount.getAccount().getId() == userId) {
                 roleForAccountRepository.delete(roleForAccount);
             }
         });

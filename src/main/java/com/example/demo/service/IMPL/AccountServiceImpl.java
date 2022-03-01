@@ -1,7 +1,7 @@
-package com.example.demo.service.implement;
+package com.example.demo.service.IMPL;
 
 import com.example.demo.DTO.AccountDTO;
-import com.example.demo.DTO.AccountResponse;
+import com.example.demo.DTO.AccountPage;
 import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.exception.AccountExeption;
 import com.example.demo.exception.MailException;
@@ -173,7 +173,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountResponse getAllUsersPage(int pageNo, int pageSize, String sortBy, String sortDir) {
+    public AccountPage getAllUsersPage(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
                 : Sort.by(sortBy).descending();
 
@@ -184,16 +184,16 @@ public class AccountServiceImpl implements AccountService {
         List<Account> listOfPosts = users.getContent();
 
         List<AccountDTO> content = accountMap.listAccountToListDTO(listOfPosts);
-        AccountResponse accountResponse = new AccountResponse();
-        accountResponse.setAccountDTOS(content);
-        accountResponse.setPageNo(users.getNumber());
-        accountResponse.setPageSize(users.getSize());
-        accountResponse.setTotalElements(users.getTotalElements());
-        accountResponse.setTotalPages(users.getTotalPages());
-        accountResponse.setFirst(users.isFirst());
-        accountResponse.setLast(users.isLast());
+        AccountPage accountPage = new AccountPage();
+        accountPage.setAccountDTOS(content);
+        accountPage.setPageNo(users.getNumber());
+        accountPage.setPageSize(users.getSize());
+        accountPage.setTotalElements(users.getTotalElements());
+        accountPage.setTotalPages(users.getTotalPages());
+        accountPage.setFirst(users.isFirst());
+        accountPage.setLast(users.isLast());
 
-        return accountResponse;
+        return accountPage;
     }
 
     private boolean checkEmail(String email) throws MailException {
