@@ -11,10 +11,12 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/admin/genre")
+@RequestMapping("/api/genre")
 public class GenreController {
     private final MovieGenreService movieGenreService;
 
+
+    //don't need page genre
     //get all genre
     @GetMapping("/getAll")
     public ResponseEntity<List<MovieGenreDTO>> getAllGenres() {

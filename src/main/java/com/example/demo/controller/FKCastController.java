@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/admin/fkCast")
+@RequestMapping("/api/fkCast")
 public class FKCastController {
     private final FKCastService fkCastService;
 

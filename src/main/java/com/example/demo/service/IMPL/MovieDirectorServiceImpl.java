@@ -33,29 +33,32 @@ public class MovieDirectorServiceImpl implements MovieDirectorService {
     }
 
     @Override
-    public void deleteMovieDirectorById(int id) {
+    public String deleteMovieDirectorById(int id) {
         MovieDirector movieDirector = movieDirectorRepository.findById(id).orElse(null);
         if (movieDirector == null) {
             throw new RuntimeException("Director not found");
         } else {
             fkDirectorService.deleteFkDirectorByDirectorId(id);
             movieDirectorRepository.delete(movieDirector);
+            return "Delete a director successfully";
         }
     }
 
     @Override
-    public void createMovieDirector(MovieDirectorDTO movieDirectorDTO) {
+    public String createMovieDirector(MovieDirectorDTO movieDirectorDTO) {
         if (checkNameInDirector(movieDirectorDTO.getName()) == false) {
             MovieDirector movieDirector = new MovieDirector();
             movieDirector.setAvatar(movieDirectorDTO.getAvatar());
             movieDirector.setName(movieDirectorDTO.getName());
             movieDirector.setStory(movieDirector.getStory());
             movieDirectorRepository.save(movieDirector);
+            return "Create a director successfully";
         }
+        return "Fail";
     }
 
     @Override
-    public void editMovieDirector(MovieDirectorDTO movieDirectorDTO) {
+    public String editMovieDirector(MovieDirectorDTO movieDirectorDTO) {
         MovieDirector movieDirector = movieDirectorRepository.findById(movieDirectorDTO.getId()).orElse(null);
         if (movieDirector == null) {
             throw new RuntimeException("Director not found");
@@ -65,7 +68,9 @@ public class MovieDirectorServiceImpl implements MovieDirectorService {
                 movieDirector.setName(movieDirectorDTO.getName());
                 movieDirector.setStory(movieDirector.getStory());
                 movieDirectorRepository.save(movieDirector);
+                return "Edit director successfully";
             }
+            return "Fail";
         }
     }
 

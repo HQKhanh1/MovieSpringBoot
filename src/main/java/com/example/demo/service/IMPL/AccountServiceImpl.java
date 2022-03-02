@@ -192,7 +192,6 @@ public class AccountServiceImpl implements AccountService {
         accountPage.setTotalPages(users.getTotalPages());
         accountPage.setFirst(users.isFirst());
         accountPage.setLast(users.isLast());
-
         return accountPage;
     }
 

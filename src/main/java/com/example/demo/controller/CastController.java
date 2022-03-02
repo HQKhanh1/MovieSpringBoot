@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/admin/cast")
+@RequestMapping("/api/cast")
 public class CastController {
     private final MovieCastService movieCastService;
 
