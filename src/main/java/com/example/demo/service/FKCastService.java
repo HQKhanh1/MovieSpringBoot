@@ -13,4 +13,6 @@ public interface FKCastService {
     List<MovieDetailDTO> getMovieDetailByCastId(int castId);
 
     void deleteFkCastByCastId(int castId);
+
+    void deleteFkCastByMovieId(int movieDetailId);
 }

@@ -3,6 +3,7 @@ package com.example.demo.service.IMPL;
 import com.example.demo.DTO.MovieDetailDTO;
 import com.example.demo.DTO.MovieDirectorDTO;
 import com.example.demo.map.MovieDetailMap;
+import com.example.demo.map.MovieDirectorMap;
 import com.example.demo.model.FKDirector;
 import com.example.demo.repository.FKDirectorRepository;
 import com.example.demo.service.FKDirectorService;
@@ -17,10 +18,18 @@ import java.util.List;
 public class FKDirectorServiceImpl implements FKDirectorService {
     private final FKDirectorRepository fkDirectorRepository;
     private final MovieDetailMap movieDetailMap;
+    private final MovieDirectorMap movieDirectorMap;
 
     @Override
     public List<MovieDirectorDTO> getDirectorByMovieId(int movieDetailId) {
-        return null;
+        List<MovieDirectorDTO> movieDirectorDTOS = new ArrayList<>();
+        List<FKDirector> fkDirectors = fkDirectorRepository.findAll();
+        fkDirectors.forEach(fkDirector -> {
+            if (fkDirector.getMovieDetail().getId() == movieDetailId){
+                movieDirectorDTOS.add(movieDirectorMap.movieDirectorToDTO(fkDirector.getMovieDirector()));
+            }
+        });
+        return movieDirectorDTOS;
     }
 
     @Override
@@ -28,7 +37,7 @@ public class FKDirectorServiceImpl implements FKDirectorService {
         List<MovieDetailDTO> movieDetailDTOS = new ArrayList<>();
         List<FKDirector> fkDirectors = fkDirectorRepository.findAll();
         fkDirectors.forEach(fkDirector -> {
-            if (fkDirector.getMovieDetail().getId() == directorId) {
+            if (fkDirector.getMovieDirector().getId() == directorId) {
                 movieDetailDTOS.add(movieDetailMap.movieDetailToDTO(fkDirector.getMovieDetail()));
             }
         });
@@ -40,6 +49,16 @@ public class FKDirectorServiceImpl implements FKDirectorService {
         List<FKDirector> fkDirectors = fkDirectorRepository.findAll();
         fkDirectors.forEach(fkDirector -> {
             if (fkDirector.getMovieDirector().getId() == directorId) {
+                fkDirectorRepository.delete(fkDirector);
+            }
+        });
+    }
+
+    @Override
+    public void deleteFkDirectorByMovieId(int movieDetailId) {
+        List<FKDirector> fkDirectors = fkDirectorRepository.findAll();
+        fkDirectors.forEach(fkDirector -> {
+            if (fkDirector.getMovieDetail().getId() == movieDetailId) {
                 fkDirectorRepository.delete(fkDirector);
             }
         });

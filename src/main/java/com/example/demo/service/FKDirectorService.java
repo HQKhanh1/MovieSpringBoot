@@ -14,4 +14,6 @@ public interface FKDirectorService {
     List<MovieDetailDTO> getMovieDetailByDirectorId(int directorId);
 
     void deleteFkDirectorByDirectorId(int directorId);
+
+    void deleteFkDirectorByMovieId(int movieDetailId);
 }

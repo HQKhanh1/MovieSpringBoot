@@ -30,6 +30,10 @@ public class ApiExceptionHandler {
     public ErrorMessage BadCredentialsException() {
         return new ErrorMessage(404, "Wrong login or account not activated", new Date());
     }
+    @ExceptionHandler(Exception.class)
+    public ErrorMessage Exception(Exception ex) {
+        return new ErrorMessage(ex.hashCode(), ex.getMessage(), new Date());
+    }
 
     @ExceptionHandler(AccountExeption.class)
     public ErrorMessage AccountNotFoundException(AccountExeption ex) {

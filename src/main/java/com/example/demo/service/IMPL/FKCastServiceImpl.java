@@ -53,4 +53,14 @@ public class FKCastServiceImpl implements FKCastService {
             }
         });
     }
+
+    @Override
+    public void deleteFkCastByMovieId(int movieDetailId) {
+        List<FKCast> fkCasts = fkCastRepository.findAll();
+        fkCasts.forEach(fkCast -> {
+            if (fkCast.getMovieDetail().getId() == movieDetailId) {
+                fkCastRepository.delete(fkCast);
+            }
+        });
+    }
 }

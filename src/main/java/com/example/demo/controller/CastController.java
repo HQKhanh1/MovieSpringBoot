@@ -40,4 +40,16 @@ public class CastController {
     public ResponseEntity<String> createCast(@RequestBody MovieCastDTO movieCastDTO) {
         return new ResponseEntity<>(movieCastService.createMovieCast(movieCastDTO), HttpStatus.OK);
     }
+
+    //edit cast
+    @PutMapping("/edit")
+    public ResponseEntity<String> editCast(@RequestBody MovieCastDTO movieCastDTO){
+        return new ResponseEntity<>(movieCastService.editMovieCast(movieCastDTO), HttpStatus.OK);
+    }
+
+    //delete cats
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<String> removeCastById(@PathVariable int id){
+        return new ResponseEntity<>(movieCastService.deleteMovieCastById(id),HttpStatus.OK);
+    }
 }

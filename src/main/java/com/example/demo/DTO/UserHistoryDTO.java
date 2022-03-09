@@ -12,9 +12,9 @@ import java.util.Date;
 public class UserHistoryDTO {
     private int id;
     //    @ManyToOne(fetch = FetchType.LAZY)
-    private AccountDTO user;
+    private int user;
     //    @ManyToOne(fetch = FetchType.LAZY)
-    private MovieDetailDTO movie;
+    private int movie;
     private Date historyDate;
 
 }

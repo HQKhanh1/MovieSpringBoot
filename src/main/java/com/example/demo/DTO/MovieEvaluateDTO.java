@@ -12,10 +12,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class MovieEvaluateDTO {
     MovieEvaluateKey id;
-    //    @ManyToOne(fetch = FetchType.LAZY)
-    private AccountDTO movieAccountDetail;
-    //    @ManyToOne(fetch = FetchType.LAZY)
-    private MovieDetailDTO movieDetail;
     private Date evaluateTime;
     private String evaluateContent;
     private int evaluateRate;

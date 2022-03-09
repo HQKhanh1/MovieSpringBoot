@@ -31,5 +31,17 @@ public class MovieDetailMap {
         });
         return movieDetailDTOS;
     }
-
+    public MovieDetail DTOToMovieDetail(MovieDetailDTO movieDetailDTO){
+        MovieDetail movieDetail = new MovieDetail();
+        movieDetail.setTitle(movieDetailDTO.getTitle());
+        movieDetail.setPoster(movieDetailDTO.getPoster());
+        movieDetail.setDetail(movieDetailDTO.getDetail());
+        movieDetail.setMovieStatus(movieDetailDTO.getMovieStatus());
+        movieDetail.setLinkTrailer(movieDetailDTO.getLinkTrailer());
+        movieDetail.setLinkMovie(movieDetailDTO.getLinkMovie());
+        movieDetail.setReleaseDate(movieDetailDTO.getReleaseDate());
+        movieDetail.setMovieDuration(movieDetailDTO.getMovieDuration());
+        movieDetail.setViewNumber(0);
+        return movieDetail;
+    }
 }
