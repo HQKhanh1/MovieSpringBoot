@@ -9,6 +9,7 @@ import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.AccountRoleRepository;
 import com.example.demo.repository.VerificationTokenRepository;
 import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.service.AccountService;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.RoleForAccountService;
 import com.example.demo.service.SendMailService;
@@ -36,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final AccountRoleRepository accountRoleRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AccountService accountService;
 
     @Override
     @Transactional
@@ -73,7 +75,11 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtTokenProvider.generateToken(authenticate);
-        return new AuthenticationResponse(token, loginRequest.getUsername());
+        return new AuthenticationResponse(
+                token, loginRequest.getUsername(),
+                roleForAccountService.getRoleForAccount(
+                        accountService.getAccountByUsername(loginRequest.getUsername()).getId()));
+
     }
 
     @Transactional
