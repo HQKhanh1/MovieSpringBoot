@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -50,7 +50,7 @@ public class MovieDetail {
     @Column(name = "release_date")
     @NotNull(message = "Movie' release date cannot be empty")
     @PastOrPresent(message = "Release time is not greater than present")
-    private Date releaseDate;
+    private LocalDate releaseDate;
 
     @Column(name = "time_movie")
     private Time movieDuration;
