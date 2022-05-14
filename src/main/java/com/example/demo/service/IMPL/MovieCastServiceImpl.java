@@ -56,6 +56,7 @@ public class MovieCastServiceImpl implements MovieCastService {
             movieCast.setAvatar(movieCastDTO.getAvatar());
             movieCast.setName(movieCastDTO.getName());
             movieCast.setStory(movieCastDTO.getStory());
+            movieCast.setBirthday(movieCastDTO.getBirthday());
             movieCastRepository.save(movieCast);
             return "Add a cast successfully";
         }

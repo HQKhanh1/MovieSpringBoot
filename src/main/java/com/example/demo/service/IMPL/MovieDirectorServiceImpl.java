@@ -51,6 +51,7 @@ public class MovieDirectorServiceImpl implements MovieDirectorService {
             movieDirector.setAvatar(movieDirectorDTO.getAvatar());
             movieDirector.setName(movieDirectorDTO.getName());
             movieDirector.setStory(movieDirector.getStory());
+            movieDirector.setBirthday(movieDirector.getBirthday());
             movieDirectorRepository.save(movieDirector);
             return "Create a director successfully";
         }
