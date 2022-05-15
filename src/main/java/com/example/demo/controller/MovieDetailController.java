@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin("http://localhost:4200/")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/movieDetail")
@@ -48,7 +49,7 @@ public class MovieDetailController {
     }
 
     @DeleteMapping("/remove/{id}")
-    public ResponseEntity<String> removeMovie(@PathVariable int id) throws Exception {
+    public ResponseEntity<MovieDetail> removeMovie(@PathVariable int id) throws Exception {
         return new ResponseEntity<>(movieDetailService.deleteMovieDetail(id), HttpStatus.OK);
     }
 }

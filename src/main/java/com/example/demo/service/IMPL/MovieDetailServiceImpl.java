@@ -96,7 +96,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     }
 
     @Override
-    public String deleteMovieDetail(int id) throws Exception {
+    public MovieDetail deleteMovieDetail(int id) throws Exception {
         MovieDetail movieDetail = movieDetailRepository.findById(id).orElse(null);
         if (movieDetail == null) {
             throw new Exception("Move not found");
@@ -106,7 +106,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
             fkGenreService.deleteByMovieId(id);
             movieEvaluateService.deleteMovieEvaluateByMovieId(id);
             movieDetailRepository.delete(movieDetail);
-            return "Delete movie detail by movie id: " + id + " successfully";
+            return movieDetail;
         }
     }
 

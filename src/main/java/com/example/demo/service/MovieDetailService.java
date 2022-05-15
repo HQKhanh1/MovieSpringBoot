@@ -17,7 +17,7 @@ public interface MovieDetailService {
 
     MovieDetail editMovieDetail(MovieDetail movieDetailDTO) throws Exception;
 
-    String deleteMovieDetail(int id) throws Exception;
+    MovieDetail deleteMovieDetail(int id) throws Exception;
 
     MovieDetail getMovieDetailByTitle(String title);
 }
