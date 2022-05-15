@@ -20,4 +20,11 @@ public class MovieGenreMap {
         });
         return movieGenreDTOS;
     }
+
+    public MovieGenre DTOToMovieGenre(MovieGenreDTO movieGenreDTO) {
+        MovieGenre movieGenre = new MovieGenre();
+        movieGenre.setId(movieGenreDTO.getId());
+        movieGenre.setName(movieGenre.getName());
+        return movieGenre;
+    }
 }

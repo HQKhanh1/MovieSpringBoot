@@ -11,7 +11,7 @@ public interface MovieGenreService {
 
     String deleteMovieGenreById(int id);
 
-    String createMovieGenre(MovieGenreDTO movieGenreDTO);
+    MovieGenreDTO createMovieGenre(MovieGenreDTO movieGenreDTO);
 
     String editMovieGenre(MovieGenreDTO movieGenreDTO);
 }

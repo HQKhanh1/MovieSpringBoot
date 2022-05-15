@@ -59,18 +59,17 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     }
 
     @Override
-    public String addMovieDetail(MovieDetailDTO movieDetailDTO) throws Exception {
-        if (checkExitTitle(movieDetailDTO.getTitle())) {
+    public MovieDetailDTO addMovieDetail(MovieDetail movieDetail) throws Exception {
+        if (checkExitTitle(movieDetail.getTitle())) {
             throw new Exception("Movie not found!");
         } else {
-            MovieDetail movieDetail = movieDetailMap.DTOToMovieDetail(movieDetailDTO);
             movieDetailRepository.save(movieDetail);
-            return "Add movie successfully";
+            return movieDetailMap.movieDetailToDTO(movieDetail);
         }
     }
 
     @Override
-    public String editMovieDetail(MovieDetailDTO movieDetailDTO) throws Exception {
+    public MovieDetail editMovieDetail(MovieDetail movieDetailDTO) throws Exception {
         MovieDetail movieDetail = movieDetailRepository.findById(movieDetailDTO.getId()).orElse(null);
         if (movieDetail == null) {
             throw new Exception("Move not found");
@@ -86,8 +85,12 @@ public class MovieDetailServiceImpl implements MovieDetailService {
             movieDetail.setReleaseDate(movieDetailDTO.getReleaseDate());
             movieDetail.setMovieDuration(movieDetailDTO.getMovieDuration());
             movieDetail.setViewNumber(movieDetailDTO.getViewNumber());
+            movieDetail.setMovieEvaluates(movieDetailDTO.getMovieEvaluates());
+            movieDetail.setFkCasts(movieDetailDTO.getFkCasts());
+            movieDetail.setFkGenres(movieDetailDTO.getFkGenres());
+            movieDetail.setFkDirectors(movieDetailDTO.getFkDirectors());
             movieDetailRepository.save(movieDetail);
-            return "Edit movie detail successfully";
+            return movieDetailDTO;
         }
 
     }
@@ -105,6 +108,11 @@ public class MovieDetailServiceImpl implements MovieDetailService {
             movieDetailRepository.delete(movieDetail);
             return "Delete movie detail by movie id: " + id + " successfully";
         }
+    }
+
+    @Override
+    public MovieDetail getMovieDetailByTitle(String title) {
+        return movieDetailRepository.findMovieDetailByTitle(title);
     }
 
     public boolean checkExitTitle(String title) {

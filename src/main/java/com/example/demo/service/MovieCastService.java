@@ -13,7 +13,7 @@ public interface MovieCastService {
 
     String deleteMovieCastById(int id);
 
-    String createMovieCast(MovieCastDTO movieCastDTO);
+    MovieCastDTO createMovieCast(MovieCastDTO movieCastDTO);
 
     String editMovieCast(MovieCastDTO movieCastDTO);
 

@@ -2,12 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.DTO.MovieDetailDTO;
 import com.example.demo.DTO.MovieDetailPage;
+import com.example.demo.model.MovieDetail;
 import com.example.demo.service.MovieDetailService;
 import com.example.demo.util.AppConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -25,13 +28,22 @@ public class MovieDetailController {
         return new ResponseEntity<>(movieDetailService.getMovieById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/getMovieDetailAll")
+    public ResponseEntity<List<MovieDetailDTO>> getMovieDetailAll() {
+        return new ResponseEntity<>(movieDetailService.getAllMovie(), HttpStatus.OK);
+    }
+    @GetMapping("/getMovieDetailByTitle/{title}")
+    public ResponseEntity<MovieDetail> getMovieDetailByTitle(@PathVariable String title) {
+        return new ResponseEntity<>(movieDetailService.getMovieDetailByTitle(title), HttpStatus.OK);
+    }
+
     @PostMapping("/addMovie")
-    public ResponseEntity<String> addMovieDetail(@RequestBody MovieDetailDTO movieDetailDTO) throws Exception {
+    public ResponseEntity<MovieDetailDTO> addMovieDetail(@RequestBody MovieDetail movieDetailDTO) throws Exception {
         return new ResponseEntity<>(movieDetailService.addMovieDetail(movieDetailDTO), HttpStatus.OK);
     }
 
     @PutMapping("/editMovieDetail")
-    public ResponseEntity<String> editMovieDetail(@RequestBody MovieDetailDTO movieDetailDTO) throws Exception {
+    public ResponseEntity<MovieDetail> editMovieDetail(@RequestBody MovieDetail movieDetailDTO) throws Exception {
         return new ResponseEntity<>(movieDetailService.editMovieDetail(movieDetailDTO), HttpStatus.OK);
     }
 

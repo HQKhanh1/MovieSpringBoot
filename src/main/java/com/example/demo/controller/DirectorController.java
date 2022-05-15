@@ -31,19 +31,20 @@ public class DirectorController {
 
     //create a director
     @PostMapping("/create")
-    public ResponseEntity<String> createDirector(@RequestBody MovieDirectorDTO movieDirectorDTO){
-        return new ResponseEntity<>(movieDirectorService.createMovieDirector(movieDirectorDTO),HttpStatus.OK);
+    public ResponseEntity<MovieDirectorDTO> createDirector(@RequestBody MovieDirectorDTO movieDirectorDTO) {
+        System.out.println("\n\n\n\n" + movieDirectorDTO.getBirthday());
+        return new ResponseEntity<>(movieDirectorService.createMovieDirector(movieDirectorDTO), HttpStatus.OK);
     }
 
     //Edit a director
     @PutMapping("/edit")
-    public ResponseEntity<String> editDirector(@RequestBody MovieDirectorDTO movieDirectorDTO){
+    public ResponseEntity<String> editDirector(@RequestBody MovieDirectorDTO movieDirectorDTO) {
         return new ResponseEntity<>(movieDirectorService.editMovieDirector(movieDirectorDTO), HttpStatus.OK);
     }
 
     //Delete a director
     @DeleteMapping("/remove/{id}")
-    public ResponseEntity<String> deleteDirector(@PathVariable int id){
+    public ResponseEntity<String> deleteDirector(@PathVariable int id) {
         return new ResponseEntity<>(movieDirectorService.deleteMovieDirectorById(id), HttpStatus.OK);
     }
 }

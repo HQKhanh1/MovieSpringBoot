@@ -37,7 +37,7 @@ public class CastController {
 
     //create a cast
     @PostMapping("/create")
-    public ResponseEntity<String> createCast(@RequestBody MovieCastDTO movieCastDTO) {
+    public ResponseEntity<MovieCastDTO> createCast(@RequestBody MovieCastDTO movieCastDTO) {
         return new ResponseEntity<>(movieCastService.createMovieCast(movieCastDTO), HttpStatus.OK);
     }
 

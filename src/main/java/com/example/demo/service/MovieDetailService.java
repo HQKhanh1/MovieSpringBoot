@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.DTO.MovieDetailDTO;
 import com.example.demo.DTO.MovieDetailPage;
+import com.example.demo.model.MovieDetail;
 
 import java.util.List;
 
@@ -12,9 +13,11 @@ public interface MovieDetailService {
 
     MovieDetailPage getAllMovieDetailPage(int pageNo, int pageSize, String sortBy, String sortDir);
 
-    String addMovieDetail(MovieDetailDTO movieDetailDTO) throws Exception;
+    MovieDetailDTO addMovieDetail(MovieDetail movieDetailDTO) throws Exception;
 
-    String editMovieDetail(MovieDetailDTO movieDetailDTO) throws Exception;
+    MovieDetail editMovieDetail(MovieDetail movieDetailDTO) throws Exception;
 
     String deleteMovieDetail(int id) throws Exception;
+
+    MovieDetail getMovieDetailByTitle(String title);
 }

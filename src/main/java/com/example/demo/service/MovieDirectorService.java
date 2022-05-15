@@ -12,7 +12,7 @@ public interface MovieDirectorService {
 
     String deleteMovieDirectorById(int id);
 
-    String createMovieDirector(MovieDirectorDTO movieDirectorDTO);
+    MovieDirectorDTO createMovieDirector(MovieDirectorDTO movieDirectorDTO);
 
     String editMovieDirector(MovieDirectorDTO movieDirectorDTO);
 

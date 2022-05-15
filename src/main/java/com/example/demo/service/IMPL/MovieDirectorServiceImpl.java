@@ -45,17 +45,18 @@ public class MovieDirectorServiceImpl implements MovieDirectorService {
     }
 
     @Override
-    public String createMovieDirector(MovieDirectorDTO movieDirectorDTO) {
+    public MovieDirectorDTO createMovieDirector(MovieDirectorDTO movieDirectorDTO) {
+        System.out.println(movieDirectorDTO.getBirthday());
         if (checkNameInDirector(movieDirectorDTO.getName()) == false) {
             MovieDirector movieDirector = new MovieDirector();
             movieDirector.setAvatar(movieDirectorDTO.getAvatar());
             movieDirector.setName(movieDirectorDTO.getName());
-            movieDirector.setStory(movieDirector.getStory());
-            movieDirector.setBirthday(movieDirector.getBirthday());
+            movieDirector.setStory(movieDirectorDTO.getStory());
+            movieDirector.setBirthday(movieDirectorDTO.getBirthday());
             movieDirectorRepository.save(movieDirector);
-            return "Create a director successfully";
+            return movieDirectorDTO;
         }
-        return "Fail";
+        return null;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class GenreController {
 
     //Create a genre
     @PostMapping("/create")
-    public ResponseEntity<String> createGenre(@RequestBody MovieGenreDTO movieGenreDTO) {
+    public ResponseEntity<MovieGenreDTO> createGenre(@RequestBody MovieGenreDTO movieGenreDTO) {
         return new ResponseEntity<>(movieGenreService.createMovieGenre(movieGenreDTO), HttpStatus.OK);
     }
 

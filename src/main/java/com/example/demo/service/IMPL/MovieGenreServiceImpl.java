@@ -41,14 +41,14 @@ public class MovieGenreServiceImpl implements MovieGenreService {
     }
 
     @Override
-    public String createMovieGenre(MovieGenreDTO movieGenreDTO) {
+    public MovieGenreDTO createMovieGenre(MovieGenreDTO movieGenreDTO) {
         MovieGenre movieGenre = new MovieGenre();
         if (checkGenreName(movieGenreDTO.getName()) == false) {
             movieGenre.setName(movieGenreDTO.getName());
             movieGenreRepository.save(movieGenre);
-            return "Create genre successfully";
+            return movieGenreDTO;
         }
-        return "Fail";
+        return null;
     }
 
     @Override

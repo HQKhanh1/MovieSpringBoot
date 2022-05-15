@@ -50,7 +50,7 @@ public class MovieCastServiceImpl implements MovieCastService {
     }
 
     @Override
-    public String createMovieCast(MovieCastDTO movieCastDTO) {
+    public MovieCastDTO createMovieCast(MovieCastDTO movieCastDTO) {
         if (checkNameExit(movieCastDTO.getName()) == false) {
             MovieCast movieCast = new MovieCast();
             movieCast.setAvatar(movieCastDTO.getAvatar());
@@ -58,9 +58,9 @@ public class MovieCastServiceImpl implements MovieCastService {
             movieCast.setStory(movieCastDTO.getStory());
             movieCast.setBirthday(movieCastDTO.getBirthday());
             movieCastRepository.save(movieCast);
-            return "Add a cast successfully";
+            return movieCastDTO;
         }
-        return "Fail";
+        return null;
 
     }
 

@@ -30,4 +30,5 @@ public class FKCastController {
     public ResponseEntity<List<MovieCastDTO>> getAllCastOnAMovie(@PathVariable int movieId) {
         return new ResponseEntity<>(fkCastService.getCastByMovieId(movieId), HttpStatus.OK);
     }
+
 }
