@@ -6,6 +6,7 @@ import com.example.demo.DTO.Password;
 import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.exception.MailException;
 import com.example.demo.exception.UsernameExitException;
+import com.example.demo.map.AccountMap;
 import com.example.demo.model.Account;
 import com.example.demo.model.utils.CheckEnabled;
 import com.example.demo.model.utils.PagingHeaders;
@@ -27,6 +28,7 @@ import java.util.List;
 @RequestMapping("/api/acc")
 public class AccountController {
     private final AccountService accountService;
+    private final AccountMap accountMap;
 
     @GetMapping("/page")
     public AccountPage getAllUsers(@RequestParam(value = "pageNo", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER, required = false) int pageNo, @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE, required = false) int pageSize, @RequestParam(value = "sortBy", defaultValue = AppConstants.DEFAULT_SORT_BY, required = false) String sortBy, @RequestParam(value = "sortDir", defaultValue = AppConstants.DEFAULT_SORT_DIRECTION, required = false) String sortDir) {
@@ -40,6 +42,11 @@ public class AccountController {
         } else {
             throw new RuntimeException("Not valid");
         }
+    }
+
+    @GetMapping("/getAccoutByUsername/{username}")
+    public ResponseEntity<AccountDTO> getAccout(@PathVariable String username){
+        return new ResponseEntity<>(accountService.getAccountByUsernameDTO(username), HttpStatus.OK);
     }
 
     @PostMapping("/getListAccEnabled")
