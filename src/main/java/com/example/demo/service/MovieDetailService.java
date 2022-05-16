@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.DTO.MovieDetailDTO;
-import com.example.demo.DTO.MovieDetailPage;
+import com.example.demo.DTO.*;
 import com.example.demo.model.MovieDetail;
 
 import java.util.List;
@@ -20,4 +19,14 @@ public interface MovieDetailService {
     MovieDetail deleteMovieDetail(int id) throws Exception;
 
     MovieDetail getMovieDetailByTitle(String title);
+
+    List<MovieRate> getListMovieRate();
+
+    MovieRate getRateMovie(int id);
+
+    List<MovieGenreDTO> getMovieGenres(int id);
+
+
+    List<MovieCastDTO> getMovieCasts(int id);
+
 }

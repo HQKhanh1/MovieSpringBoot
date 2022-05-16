@@ -1,9 +1,10 @@
 package com.example.demo.service.IMPL;
 
-import com.example.demo.DTO.MovieDetailDTO;
-import com.example.demo.DTO.MovieDetailPage;
+import com.example.demo.DTO.*;
+import com.example.demo.map.MovieCastMap;
 import com.example.demo.map.MovieDetailMap;
-import com.example.demo.model.MovieDetail;
+import com.example.demo.map.MovieGenreMap;
+import com.example.demo.model.*;
 import com.example.demo.repository.MovieDetailRepository;
 import com.example.demo.service.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +27,8 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     private final FKCastService fkCastService;
     private final MovieEvaluateService movieEvaluateService;
     private final MovieDetailMap movieDetailMap;
+    private final MovieGenreMap movieGenreMap;
+    private final MovieCastMap movieCastMap;
 
     @Override
     public List<MovieDetailDTO> getAllMovie() {
@@ -113,6 +119,74 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     @Override
     public MovieDetail getMovieDetailByTitle(String title) {
         return movieDetailRepository.findMovieDetailByTitle(title);
+    }
+
+    @Override
+    public List<MovieRate> getListMovieRate() {
+        List<MovieRate> movieRates = new ArrayList<>();
+        List<MovieDetailDTO> movieDetailDTOS = getAllMovie();
+        for (MovieDetailDTO movieDetailDTO : movieDetailDTOS) {
+            movieRates.add(getRateMovie(movieDetailDTO.getId()));
+        }
+        return movieRates.stream().sorted(Comparator.comparing(MovieRate::getRate).reversed()).collect(Collectors.toList());
+    }
+
+    @Override
+    public MovieRate getRateMovie(int id) {
+        List<MovieEvaluate> movieEvaluates = movieEvaluateService.getMovieEvaluates();
+        int sumRate = 0;
+        int countMovie = 0;
+        MovieDetailDTO movieDetailDTO = new MovieDetailDTO();
+        if (movieEvaluates != null) {
+            System.out.println("Evalute khac null");
+        } else {
+
+            System.out.println("Evalute khac null");
+        }
+        assert movieEvaluates != null;
+        for (MovieEvaluate movieEvaluate : movieEvaluates) {
+            System.out.println("\n\n\n" + movieEvaluate.getId().getUserId());
+            System.out.println(movieEvaluate.getId().getMovieId());
+            if (movieEvaluate.getId().getMovieId() == id) {
+                movieDetailDTO = movieDetailMap.movieDetailToDTO(movieEvaluate.getMovieDetail());
+                sumRate += movieEvaluate.getEvaluateRate();
+                countMovie = countMovie + 1;
+            }
+        }
+        if (countMovie != 0) {
+            return new MovieRate(movieDetailDTO, ((double) sumRate / (double) countMovie));
+        } else {
+            System.out.println("Hehehehe");
+            return null;
+        }
+    }
+
+    @Override
+    public List<MovieGenreDTO> getMovieGenres(int id) {
+        MovieDetail movieDetail = movieDetailRepository.getById(id);
+        List<FKGenre> fkGenres = new ArrayList<>();
+        List<MovieGenre> genreList = new ArrayList<>();
+        if (movieDetail.getFkGenres() != null || movieDetail.getFkGenres().size() != 0) {
+            fkGenres = movieDetail.getFkGenres();
+        }
+        for (FKGenre fkGenre : fkGenres) {
+            genreList.add(fkGenre.getMovieGenre());
+        }
+        return movieGenreMap.listMovieGenreToDTO(genreList);
+    }
+
+    @Override
+    public List<MovieCastDTO> getMovieCasts(int id) {
+        MovieDetail movieDetailCast = movieDetailRepository.getById(id);
+        List<FKCast> fkCasts = new ArrayList<>();
+        List<MovieCast> castList = new ArrayList<>();
+        if (movieDetailCast.getFkCasts() != null || movieDetailCast.getFkCasts().size() != 0) {
+            fkCasts = movieDetailCast.getFkCasts();
+        }
+        for (FKCast fkCast : fkCasts) {
+            castList.add(fkCast.getMovieCast());
+        }
+        return movieCastMap.listMovieCastToDTO(castList);
     }
 
     public boolean checkExitTitle(String title) {

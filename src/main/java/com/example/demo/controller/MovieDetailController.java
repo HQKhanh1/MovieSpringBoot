@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.DTO.MovieDetailDTO;
-import com.example.demo.DTO.MovieDetailPage;
+import com.example.demo.DTO.*;
 import com.example.demo.model.MovieDetail;
 import com.example.demo.service.MovieDetailService;
 import com.example.demo.util.AppConstants;
@@ -33,6 +32,26 @@ public class MovieDetailController {
     public ResponseEntity<List<MovieDetailDTO>> getMovieDetailAll() {
         return new ResponseEntity<>(movieDetailService.getAllMovie(), HttpStatus.OK);
     }
+
+    @GetMapping("/getMovieRates")
+    public ResponseEntity<List<MovieRate>> getMovierates() {
+        return new ResponseEntity<>(movieDetailService.getListMovieRate(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getMovieRate/{id}")
+    public ResponseEntity<MovieRate> getMovierate(@PathVariable int id) {
+        return new ResponseEntity<>(movieDetailService.getRateMovie(id), HttpStatus.OK);
+    }
+    @GetMapping("/getGenreByMovieId/{id}")
+    public ResponseEntity<List<MovieGenreDTO>> getGenreByMovieId(@PathVariable int id) {
+        return new ResponseEntity<>(movieDetailService.getMovieGenres(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/getCastByMovieId/{id}")
+    public ResponseEntity<List<MovieCastDTO>> getCastByMovieId(@PathVariable int id) {
+        return new ResponseEntity<>(movieDetailService.getMovieCasts(id), HttpStatus.OK);
+    }
+
     @GetMapping("/getMovieDetailByTitle/{title}")
     public ResponseEntity<MovieDetail> getMovieDetailByTitle(@PathVariable String title) {
         return new ResponseEntity<>(movieDetailService.getMovieDetailByTitle(title), HttpStatus.OK);

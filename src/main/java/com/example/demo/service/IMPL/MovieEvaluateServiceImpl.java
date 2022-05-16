@@ -31,6 +31,11 @@ public class MovieEvaluateServiceImpl implements MovieEvaluateService {
     }
 
     @Override
+    public List<MovieEvaluate> getMovieEvaluates() {
+        return movieEvaluateRepository.findAll();
+    }
+
+    @Override
     public void deleteMovieEvaluateByMovieId(int movieId) {
         List<MovieEvaluate> movieEvaluates = movieEvaluateRepository.findAll();
         movieEvaluates.forEach(movieEvaluate -> {
