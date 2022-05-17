@@ -26,14 +26,17 @@ public interface AccountService {
 
     boolean checkPasswordForAccount(Account account, String currentPassword);
 
-    String changePasswordForAccount(Account account, String passwordChange);
+    Boolean changePasswordForAccount(Account account, String passwordChange);
 
     String deleteAccountByUsername(String username);
 
-    String editAccountByUsername(AccountDTO accountDTO) throws UsernameExitException, MailException;
+    Boolean editAccountByUsername(Account account) throws UsernameExitException, MailException;
 
     String createAccount(RegisterRequest registerRequest, int roleId) throws MailException, UsernameExitException;
 
     AccountPage getAllUsersPage(int pageNo, int pageSize, String sortBy, String sortDir);
 
+    boolean forgotPassword(Account account);
+
+    Account getAccountByEmail(String email);
 }

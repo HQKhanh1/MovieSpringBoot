@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,10 +106,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String changePasswordForAccount(Account account, String passwordHadChange) {
+    public Boolean changePasswordForAccount(Account account, String passwordHadChange) {
         account.setPassword(passwordEncoder.encode(passwordHadChange));
         accountRepository.save(account);
-        return "Change password have successfully";
+        return true;
     }
 
     @Override
@@ -128,18 +129,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String editAccountByUsername(AccountDTO accountDTO) throws UsernameExitException, MailException {
+    public Boolean editAccountByUsername(Account accountDTO) throws UsernameExitException, MailException {
         Account account = accountRepository.findMovieAccountByUsername(accountDTO.getUsername());
         if (account == null) {
             throw new AccountExeption("Account not found with username: " + accountDTO.getUsername());
         } else {
-            if (checkUsername(accountDTO.getUsername()) == false && checkEmail(accountDTO.getUsername()) == false) {
+            if (!checkEmail(accountDTO.getUsername()) || accountDTO.getEmail().equals(account.getEmail())) {
                 accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
-                account = accountMap.DTOToAccount(accountDTO);
-                accountRepository.save(account);
-                return "Edit info account successfully";
+                accountRepository.save(accountDTO);
+                return true;
             } else {
-                return "Fail";
+                return false;
             }
         }
     }
@@ -195,6 +195,25 @@ public class AccountServiceImpl implements AccountService {
         return accountPage;
     }
 
+    @Override
+    public boolean forgotPassword(Account account) {
+        account.setPassword(DataUtils.generateTempPwd(8));
+        sendMailService.forgotPassword(account,account.getPassword());
+        account.setPassword(BCrypt.hashpw(account.getPassword(),BCrypt.gensalt(12)));
+        accountRepository.save(account);
+        return true;
+    }
+
+    @Override
+    public Account getAccountByEmail(String email) {
+        for(Account account: new ArrayList<>(accountRepository.findAll())){
+            if (email.equals(account.getEmail())){
+                return account;
+            }
+        }
+        return null;
+    }
+
     private boolean checkEmail(String email) throws MailException {
         for (Account account : new ArrayList<>(accountRepository.findAll())) {
             if (email.equals(account.getEmail())) {
@@ -204,10 +223,11 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
 
-    private boolean checkUsername(String username) throws UsernameExitException {
+    private boolean checkUsername(String username)  {
         for (Account userCheck : new ArrayList<>(accountRepository.findAll())) {
             if (username.equals(userCheck.getUsername())) {
-                throw new UsernameExitException("Username: " + username + " already existed");
+                return true;
+
             }
         }
         return false;

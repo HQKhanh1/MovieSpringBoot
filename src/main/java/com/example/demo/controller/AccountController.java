@@ -53,8 +53,8 @@ public class AccountController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<String> editAccountByUsername(@RequestBody AccountDTO accountDTO) throws UsernameExitException, MailException {
-        return new ResponseEntity<>(accountService.editAccountByUsername(accountDTO), HttpStatus.OK);
+    public ResponseEntity<Boolean> editAccountByUsername(@RequestBody Account account) throws UsernameExitException, MailException {
+        return new ResponseEntity<>(accountService.editAccountByUsername(account), HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteAcc/{username}")
@@ -69,9 +69,15 @@ public class AccountController {
     }
 
     @PostMapping("/changePassword/{username}")
-    public ResponseEntity<String> changePassword(@RequestBody Password password, @PathVariable String username) {
+    public ResponseEntity<Boolean> changePassword(@RequestBody Password password, @PathVariable String username) {
         Account account = accountService.getAccountByUsername(username);
         return new ResponseEntity<>(accountService.changePasswordForAccount(account, password.getPassword()), HttpStatus.OK);
+    }
+
+    @PostMapping("/forgotPassword/{email}")
+    public ResponseEntity<Boolean> forgotPassword(@PathVariable String email){
+        Account account= accountService.getAccountByEmail(email);
+        return new ResponseEntity<>(accountService.forgotPassword(account), HttpStatus.OK);
     }
 
     public HttpHeaders returnHttpHeaders(PagingResponse response) {

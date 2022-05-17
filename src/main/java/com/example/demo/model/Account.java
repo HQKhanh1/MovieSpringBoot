@@ -84,4 +84,26 @@ public class Account {
     @EqualsAndHashCode.Exclude
     private List<MovieEvaluate> movieEvaluates;
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", email='" + email + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", birthday=" + birthday +
+                ", idTown=" + idTown +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", gender=" + gender +
+                ", accountRoles=" + accountRoles +
+                ", verificationTokens=" + verificationTokens +
+                ", userHistories=" + userHistories +
+                ", movieEvaluates=" + movieEvaluates +
+                '}';
+    }
 }
