@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -33,7 +33,7 @@ public class MovieCast {
 
     @Column(name = "birthday")
     @NotNull(message = "Cast's birthday cannot be empty")
-    private Date birthday;
+    private LocalDate birthday;
 
     @OneToMany(mappedBy = "movieCast", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude

@@ -3,6 +3,7 @@ package com.example.demo.service.IMPL;
 import com.example.demo.DTO.*;
 import com.example.demo.map.MovieCastMap;
 import com.example.demo.map.MovieDetailMap;
+import com.example.demo.map.MovieEvaluateMap;
 import com.example.demo.map.MovieGenreMap;
 import com.example.demo.model.*;
 import com.example.demo.repository.MovieDetailRepository;
@@ -29,6 +30,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     private final MovieDetailMap movieDetailMap;
     private final MovieGenreMap movieGenreMap;
     private final MovieCastMap movieCastMap;
+    private final MovieEvaluateMap movieEvaluateMap;
 
     @Override
     public List<MovieDetailDTO> getAllMovie() {
@@ -124,9 +126,13 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     @Override
     public List<MovieRate> getListMovieRate() {
         List<MovieRate> movieRates = new ArrayList<>();
-        List<MovieDetailDTO> movieDetailDTOS = getAllMovie();
-        for (MovieDetailDTO movieDetailDTO : movieDetailDTOS) {
-            movieRates.add(getRateMovie(movieDetailDTO.getId()));
+        List<MovieDetail> movieDetails = movieDetailRepository.findAll();
+        for (MovieDetail movieDetail : movieDetails) {
+            if (movieDetail.getMovieEvaluates().isEmpty()) {
+                movieRates.add(new MovieRate(movieDetailMap.movieDetailToDTO(movieDetail), 0.0));
+            } else {
+                movieRates.add(getRateMovie(movieDetail.getId()));
+            }
         }
         return movieRates.stream().sorted(Comparator.comparing(MovieRate::getRate).reversed()).collect(Collectors.toList());
     }
@@ -137,16 +143,8 @@ public class MovieDetailServiceImpl implements MovieDetailService {
         int sumRate = 0;
         int countMovie = 0;
         MovieDetailDTO movieDetailDTO = new MovieDetailDTO();
-        if (movieEvaluates != null) {
-            System.out.println("Evalute khac null");
-        } else {
-
-            System.out.println("Evalute khac null");
-        }
         assert movieEvaluates != null;
         for (MovieEvaluate movieEvaluate : movieEvaluates) {
-            System.out.println("\n\n\n" + movieEvaluate.getId().getUserId());
-            System.out.println(movieEvaluate.getId().getMovieId());
             if (movieEvaluate.getId().getMovieId() == id) {
                 movieDetailDTO = movieDetailMap.movieDetailToDTO(movieEvaluate.getMovieDetail());
                 sumRate += movieEvaluate.getEvaluateRate();
@@ -156,8 +154,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
         if (countMovie != 0) {
             return new MovieRate(movieDetailDTO, ((double) sumRate / (double) countMovie));
         } else {
-            System.out.println("Hehehehe");
-            return null;
+            return new MovieRate(movieDetailDTO, 0.0);
         }
     }
 
@@ -187,6 +184,23 @@ public class MovieDetailServiceImpl implements MovieDetailService {
             castList.add(fkCast.getMovieCast());
         }
         return movieCastMap.listMovieCastToDTO(castList);
+    }
+
+    @Override
+    public List<MovieDetailDTO> search(String searchQuery) {
+        return movieDetailMap.listMovieDetailToDTO(movieDetailRepository.findByTitleLike(searchQuery));
+    }
+
+    @Override
+    public List<MovieEvaluateDTO> loadEvaluate(int movieId, int accId) {
+        List<MovieEvaluate> movieEvaluates = movieEvaluateService.getMovieEvaluates();
+        List<MovieEvaluateDTO> movieEvaluateDTOS = new ArrayList<>();
+        for (MovieEvaluate movieEvaluate: movieEvaluates) {
+            if (movieEvaluate.getId().getMovieId() == movieId) {
+                movieEvaluateDTOS.add(movieEvaluateMap.movieEvaluateToDTO(movieEvaluate));
+            }
+        }
+        return movieEvaluateDTOS;
     }
 
     public boolean checkExitTitle(String title) {

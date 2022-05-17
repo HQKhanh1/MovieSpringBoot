@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.model.Key.MovieEvaluateKey;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class MovieEvaluate {
 
     @Column(name = "evaluate_time")
     @PastOrPresent(message = "Evaluate time is not greater than present")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyyd@HH:mm:ss")
     private Date evaluateTime;
 
     @Column(name = "evaluate_content")
@@ -42,4 +44,11 @@ public class MovieEvaluate {
     @NotNull(message = "Evaluate rate cannot be null")
     private int evaluateRate;
 
+    public Date getEvaluateTime() {
+        return evaluateTime;
+    }
+
+    public void setEvaluateTime(Date evaluateTime) {
+        this.evaluateTime = evaluateTime;
+    }
 }

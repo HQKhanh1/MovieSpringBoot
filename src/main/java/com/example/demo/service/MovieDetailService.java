@@ -29,4 +29,7 @@ public interface MovieDetailService {
 
     List<MovieCastDTO> getMovieCasts(int id);
 
+    List<MovieDetailDTO> search(String searchQuery);
+
+    List<MovieEvaluateDTO> loadEvaluate(int movieId, int accId);
 }
