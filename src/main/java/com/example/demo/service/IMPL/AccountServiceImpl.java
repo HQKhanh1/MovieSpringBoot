@@ -9,6 +9,8 @@ import com.example.demo.exception.UsernameExitException;
 import com.example.demo.map.AccountMap;
 import com.example.demo.model.Account;
 import com.example.demo.model.AccountRole;
+import com.example.demo.model.Key.RoleForAccountKey;
+import com.example.demo.model.RoleForAccount;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.AccountRoleRepository;
 import com.example.demo.service.*;
@@ -21,7 +23,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,25 +130,24 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Boolean editAccountByUsername(Account accountDTO) throws UsernameExitException, MailException {
+    public Account editAccountByUsername(AccountDTO accountDTO) throws MailException {
         Account account = accountRepository.findMovieAccountByUsername(accountDTO.getUsername());
-        if (account == null) {
-            throw new AccountExeption("Account not found with username: " + accountDTO.getUsername());
+        if (checkEmail(accountDTO.getEmail(), account.getUsername()) != false) {
+            throw new MailException("Email is exit");
         } else {
-            if (!checkEmail(accountDTO.getUsername()) || accountDTO.getEmail().equals(account.getEmail())) {
-                accountDTO.setPassword(passwordEncoder.encode(accountDTO.getPassword()));
-                accountRepository.save(accountDTO);
-                return true;
-            } else {
-                return false;
-            }
+            account.setLastname(accountDTO.getLastname());
+            accountRepository.save(account);
+            System.out.println("\n\n\n\n\n\n\n bbbbbbbbbbbbbbbbbbbbbb: " + account.getLastname());
+            return account;
         }
     }
 
     @Override
-    @Transactional
-    public String createAccount(RegisterRequest registerRequest, int roleId) throws MailException, UsernameExitException {
-        if (!this.checkEmail(registerRequest.getEmail()) && !this.checkUsername(registerRequest.getUsername())) {
+    public RegisterRequest createAccount(RegisterRequest registerRequest, int roleId) throws
+            MailException, UsernameExitException {
+        //check mail bang fasle => email không tồn tại
+        if (this.checkEmail(registerRequest.getEmail(), registerRequest.getUsername()) == false
+                && this.checkUsername(registerRequest.getUsername()) == false) {
             Account account = new Account();
             account.setUsername(registerRequest.getUsername());
             account.setPassword(DataUtils.generateTempPwd(8));
@@ -167,9 +167,9 @@ public class AccountServiceImpl implements AccountService {
             roleForAccountService.addRoleForAccount(
                     accountRepository.findMovieAccountByUsername(account.getUsername()),
                     accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_USER));
-            return "Create new Account successfully";
+            return registerRequest;
         }
-        return "null";
+        return null;
     }
 
     @Override
@@ -198,38 +198,46 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean forgotPassword(Account account) {
         account.setPassword(DataUtils.generateTempPwd(8));
-        sendMailService.forgotPassword(account,account.getPassword());
-        account.setPassword(BCrypt.hashpw(account.getPassword(),BCrypt.gensalt(12)));
+        sendMailService.forgotPassword(account, account.getPassword());
+        account.setPassword(BCrypt.hashpw(account.getPassword(), BCrypt.gensalt(12)));
         accountRepository.save(account);
         return true;
     }
 
     @Override
     public Account getAccountByEmail(String email) {
-        for(Account account: new ArrayList<>(accountRepository.findAll())){
-            if (email.equals(account.getEmail())){
+        for (Account account : new ArrayList<>(accountRepository.findAll())) {
+            if (email.equals(account.getEmail())) {
                 return account;
             }
         }
         return null;
     }
 
-    private boolean checkEmail(String email) throws MailException {
+    private boolean checkEmail(String email, String username) throws MailException {
         for (Account account : new ArrayList<>(accountRepository.findAll())) {
-            if (email.equals(account.getEmail())) {
+            if (!account.getUsername().equals(username) && email.equals(account.getEmail())) {
                 throw new MailException("User with email: " + email + " already existed");
             }
         }
         return false;
     }
 
-    private boolean checkUsername(String username)  {
+    private boolean checkUsername(String username) throws UsernameExitException {
         for (Account userCheck : new ArrayList<>(accountRepository.findAll())) {
             if (username.equals(userCheck.getUsername())) {
-                return true;
-
+                throw new UsernameExitException("Username is exit");
             }
         }
         return false;
+    }
+    private List<RoleForAccount> setDefaultRole(int accId){
+        List<RoleForAccount> roleForAccounts = new ArrayList<>();
+        roleForAccounts.add(new RoleForAccount(
+                new RoleForAccountKey(accId, AppConstants.DEFAULT_ROLE_KEY_USER),
+                accountRepository.getById(accId),
+                accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_USER)
+        ));
+        return roleForAccounts;
     }
 }

@@ -22,15 +22,15 @@ public class UserHistory {
     @ManyToOne(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "id_user")
-    private Account user;
+    private Account user = new Account();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @JoinColumn(name = "id_movie")
-    private MovieDetail movie;
+    private MovieDetail movie = new MovieDetail();
 
     @Column(name = "history_date")
     @NotNull(message = "History date cannot be empty")
     @PastOrPresent(message = "History date is not great than present")
-    private Date historyDate;
+    private Date historyDate = new Date();
 }

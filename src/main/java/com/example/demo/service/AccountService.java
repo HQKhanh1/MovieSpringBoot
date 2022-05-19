@@ -30,9 +30,9 @@ public interface AccountService {
 
     String deleteAccountByUsername(String username);
 
-    Boolean editAccountByUsername(Account account) throws UsernameExitException, MailException;
+    Account editAccountByUsername(AccountDTO account) throws UsernameExitException, MailException;
 
-    String createAccount(RegisterRequest registerRequest, int roleId) throws MailException, UsernameExitException;
+    RegisterRequest createAccount(RegisterRequest registerRequest, int roleId) throws MailException, UsernameExitException;
 
     AccountPage getAllUsersPage(int pageNo, int pageSize, String sortBy, String sortDir);
 

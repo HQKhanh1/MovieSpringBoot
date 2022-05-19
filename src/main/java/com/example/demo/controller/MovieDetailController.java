@@ -44,6 +44,7 @@ public class MovieDetailController {
     public ResponseEntity<MovieRate> getMovierate(@PathVariable int id) {
         return new ResponseEntity<>(movieDetailService.getRateMovie(id), HttpStatus.OK);
     }
+
     @GetMapping("/getGenreByMovieId/{id}")
     public ResponseEntity<List<MovieGenreDTO>> getGenreByMovieId(@PathVariable int id) {
         return new ResponseEntity<>(movieDetailService.getMovieGenres(id), HttpStatus.OK);

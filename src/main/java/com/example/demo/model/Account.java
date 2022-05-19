@@ -7,6 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,11 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "movie_account")
-public class Account {
+public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "movie_acc_id")
-    private int id;
+    @Column(name = "movie_acc_id", unique = true, nullable = false)
+    private Integer id;
 
     @Column(name = "acc_name", unique = true)
     @NotBlank(message = "Username cannot be empty")
@@ -31,7 +33,7 @@ public class Account {
     private String password;
 
     @Column(name = "enabled", nullable = false)
-    private boolean enabled;
+    private boolean enabled = false;
 
     @Column(name = "email", unique = true)
     @NotBlank(message = "Email cannot be empty")
@@ -39,7 +41,7 @@ public class Account {
     private String email;
 
     @Column(name = "avatar")
-    private String avatar;
+    private String avatar = "https://www.shareicon.net/data/512x512/2017/01/06/868320_people_512x512.png";
 
     @Column(name = "firstname")
     @NotBlank(message = "Firstname cannot be empty")
@@ -70,19 +72,19 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
-    private List<RoleForAccount> accountRoles;
+    private List<RoleForAccount> accountRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountInToken", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
-    private List<VerificationToken> verificationTokens;
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
-    private List<UserHistory> userHistories;
+    private List<UserHistory> userHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "accountDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
-    private List<MovieEvaluate> movieEvaluates;
+    private List<MovieEvaluate> movieEvaluates = new ArrayList<>();
 
     @Override
     public String toString() {

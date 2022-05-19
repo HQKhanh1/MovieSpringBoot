@@ -17,25 +17,25 @@ import java.util.Date;
 @Table(name = "move_evaluate")
 public class MovieEvaluate {
     @EmbeddedId
-    private MovieEvaluateKey id;
+    private MovieEvaluateKey id = new MovieEvaluateKey();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     @JoinColumn(name = "id_user")
     @EqualsAndHashCode.Exclude
-    private Account accountDetail;
+    private Account accountDetail = new Account();
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("movieId")
     @JoinColumn(name = "id_movie")
     @EqualsAndHashCode.Exclude
-    private MovieDetail movieDetail;
+    private MovieDetail movieDetail = new MovieDetail();
 
     @Column(name = "evaluate_time")
     @PastOrPresent(message = "Evaluate time is not greater than present")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyyd@HH:mm:ss")
-    private Date evaluateTime;
+    private Date evaluateTime = new Date();
 
     @Column(name = "evaluate_content")
     private String evaluateContent;
@@ -43,12 +43,4 @@ public class MovieEvaluate {
     @Column(name = "evaluate_rate")
     @NotNull(message = "Evaluate rate cannot be null")
     private int evaluateRate;
-
-    public Date getEvaluateTime() {
-        return evaluateTime;
-    }
-
-    public void setEvaluateTime(Date evaluateTime) {
-        this.evaluateTime = evaluateTime;
-    }
 }

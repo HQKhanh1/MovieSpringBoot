@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +18,7 @@ public class MovieDetailDTO {
     private Boolean movieStatus;
     private String linkTrailer;
     private String linkMovie;
-    private LocalDate releaseDate;
+    private Date releaseDate;
     private Time movieDuration;
     private int viewNumber;
 }

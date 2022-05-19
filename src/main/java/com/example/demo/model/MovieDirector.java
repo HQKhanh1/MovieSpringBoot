@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,5 +38,5 @@ public class MovieDirector {
 
     @OneToMany(mappedBy = "movieDirector", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<FKDirector> fkDirectors;
+    private List<FKDirector> fkDirectors = new ArrayList<>();
 }

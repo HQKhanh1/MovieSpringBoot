@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,16 +33,12 @@ public class AccountController {
     }
 
     @PostMapping("/createAcc/{roleId}")
-    public ResponseEntity<String> createNewAccount(@RequestBody @Valid RegisterRequest registerRequest, @PathVariable int roleId, BindingResult bindingResult) throws UsernameExitException, MailException {
-        if (!bindingResult.hasErrors()) {
-            return new ResponseEntity<>(accountService.createAccount(registerRequest, roleId), HttpStatus.OK);
-        } else {
-            throw new RuntimeException("Not valid");
-        }
+    public ResponseEntity<RegisterRequest> createNewAccount(@RequestBody @Valid RegisterRequest registerRequest, @PathVariable int roleId) throws UsernameExitException, MailException {
+        return new ResponseEntity<>(accountService.createAccount(registerRequest, roleId), HttpStatus.CREATED);
     }
 
     @GetMapping("/getAccoutByUsername/{username}")
-    public ResponseEntity<AccountDTO> getAccout(@PathVariable String username){
+    public ResponseEntity<AccountDTO> getAccout(@PathVariable String username) {
         return new ResponseEntity<>(accountService.getAccountByUsernameDTO(username), HttpStatus.OK);
     }
 
@@ -53,7 +48,7 @@ public class AccountController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Boolean> editAccountByUsername(@RequestBody Account account) throws UsernameExitException, MailException {
+    public ResponseEntity<Account> editAccountByUsername(@RequestBody AccountDTO account) throws UsernameExitException, MailException {
         return new ResponseEntity<>(accountService.editAccountByUsername(account), HttpStatus.OK);
     }
 
@@ -75,8 +70,8 @@ public class AccountController {
     }
 
     @PostMapping("/forgotPassword/{email}")
-    public ResponseEntity<Boolean> forgotPassword(@PathVariable String email){
-        Account account= accountService.getAccountByEmail(email);
+    public ResponseEntity<Boolean> forgotPassword(@PathVariable String email) {
+        Account account = accountService.getAccountByEmail(email);
         return new ResponseEntity<>(accountService.forgotPassword(account), HttpStatus.OK);
     }
 

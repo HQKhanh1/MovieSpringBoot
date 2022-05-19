@@ -16,15 +16,15 @@ import javax.persistence.*;
 @Table(name = "fk_director")
 public class FKDirector {
     @EmbeddedId
-    private FkDirectorKey id;
+    private FkDirectorKey id = new FkDirectorKey();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("movieId")
     @JoinColumn(name = "movie_id")
-    private MovieDetail movieDetail;
+    private MovieDetail movieDetail = new MovieDetail();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("dricetorId")
     @JoinColumn(name = "dricetor_id")
-    private MovieDirector movieDirector;
+    private MovieDirector movieDirector = new MovieDirector();
 }

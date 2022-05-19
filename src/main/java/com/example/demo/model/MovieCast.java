@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,5 +38,5 @@ public class MovieCast {
 
     @OneToMany(mappedBy = "movieCast", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<FKCast> fkCasts;
+    private List<FKCast> fkCasts = new ArrayList<>();
 }

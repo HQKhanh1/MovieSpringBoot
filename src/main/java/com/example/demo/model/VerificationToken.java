@@ -21,10 +21,10 @@ public class VerificationToken {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
     @EqualsAndHashCode.Exclude
-    private Account accountInToken;
+    private Account accountInToken = new Account();
 
     @Column(name = "create_time")
-    private Instant createdTime;
+    private Instant createdTime = Instant.now();
 
     @Column(name = "token_content")
     @NotBlank(message = "Token content cannot be empty")

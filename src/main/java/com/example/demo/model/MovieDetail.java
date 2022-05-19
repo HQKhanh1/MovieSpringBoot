@@ -6,8 +6,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
+import java.io.Serializable;
 import java.sql.Time;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -16,11 +18,11 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "moviedetail")
-public class MovieDetail {
+public class MovieDetail implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "title")
     @NotBlank(message = "Movie's title cannot be empty")
@@ -50,7 +52,7 @@ public class MovieDetail {
     @Column(name = "release_date")
     @NotNull(message = "Movie' release date cannot be empty")
     @PastOrPresent(message = "Release time is not greater than present")
-    private LocalDate releaseDate;
+    private Date releaseDate;
 
     @Column(name = "time_movie")
     private Time movieDuration;
@@ -60,17 +62,18 @@ public class MovieDetail {
 
     @OneToMany(mappedBy = "movieDetail", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<MovieEvaluate> movieEvaluates;
+    private List<MovieEvaluate> movieEvaluates = new ArrayList<>();
 
     @OneToMany(mappedBy = "movieDetail", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<FKCast> fkCasts;
+    private List<FKCast> fkCasts = new ArrayList<>();
 
     @OneToMany(mappedBy = "movieDetail", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<FKGenre> fkGenres;
+    private List<FKGenre> fkGenres = new ArrayList<>();
 
     @OneToMany(mappedBy = "movieDetail", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private List<FKDirector> fkDirectors;
+    private List<FKDirector> fkDirectors = new ArrayList<>();
+
 }

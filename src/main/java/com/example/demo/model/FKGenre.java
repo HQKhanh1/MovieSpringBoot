@@ -16,7 +16,8 @@ import javax.persistence.*;
 @Table(name = "fk_genre")
 public class FKGenre {
     @EmbeddedId
-    private FkGenreKey id;
+    private FkGenreKey id = new FkGenreKey();
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("movieId")
