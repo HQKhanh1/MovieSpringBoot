@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
+    private int accId;
     private String authenticationToken;
     //    private String refreshToken;
 //    private Instant expiresAt;

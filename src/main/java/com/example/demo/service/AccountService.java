@@ -3,11 +3,11 @@ package com.example.demo.service;
 
 import com.example.demo.DTO.AccountDTO;
 import com.example.demo.DTO.AccountPage;
-import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.exception.MailException;
 import com.example.demo.exception.UsernameExitException;
-import com.example.demo.model.AccountRole;
 import com.example.demo.model.Account;
+import com.example.demo.model.AccountRole;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,11 +32,13 @@ public interface AccountService {
 
     Account editAccountByUsername(AccountDTO account) throws UsernameExitException, MailException;
 
-    RegisterRequest createAccount(RegisterRequest registerRequest, int roleId) throws MailException, UsernameExitException;
+    Account createAccount(Account account) throws MailException, UsernameExitException;
 
     AccountPage getAllUsersPage(int pageNo, int pageSize, String sortBy, String sortDir);
 
     boolean forgotPassword(Account account);
 
     Account getAccountByEmail(String email);
+
+    boolean saveImageAcc(MultipartFile image, int accId);
 }

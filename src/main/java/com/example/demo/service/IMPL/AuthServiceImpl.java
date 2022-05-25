@@ -3,6 +3,8 @@ package com.example.demo.service.IMPL;
 import com.example.demo.DTO.AuthenticationResponse;
 import com.example.demo.DTO.LoginRequest;
 import com.example.demo.DTO.RegisterRequest;
+import com.example.demo.exception.MailException;
+import com.example.demo.exception.UsernameExitException;
 import com.example.demo.model.Account;
 import com.example.demo.model.VerificationToken;
 import com.example.demo.repository.AccountRepository;
@@ -38,29 +40,35 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final AccountService accountService;
+    private final AccountServiceImpl accountServiceImpl;
 
     @Override
     @Transactional
-    public void signup(RegisterRequest registerRequest) {
-        Account user = new Account();
-        user.setUsername(registerRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setEmail(registerRequest.getEmail());
-        user.setLastname(registerRequest.getLastname());
-        user.setFirstname(registerRequest.getFirstname());
-        user.setBirthday(registerRequest.getBirthday());
-        user.setGender(registerRequest.isGender());
-        user.setAvatar(registerRequest.getAvatar());
-        user.setIdTown(registerRequest.getIdTown());
-        user.setAddress(registerRequest.getAddress());
-        user.setEnabled(false);
-        accountRepository.save(user);
+    public Account signup(RegisterRequest registerRequest) throws MailException, UsernameExitException {
+        if (accountServiceImpl.checkEmail(registerRequest.getEmail(), registerRequest.getUsername()) == false
+                && accountServiceImpl.checkUsername(registerRequest.getUsername()) == false) {
+            Account user = new Account();
+            user.setUsername(registerRequest.getUsername());
+            user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+            user.setEmail(registerRequest.getEmail());
+            user.setLastname(registerRequest.getLastname());
+            user.setFirstname(registerRequest.getFirstname());
+            user.setBirthday(registerRequest.getBirthday());
+            user.setGender(registerRequest.isGender());
+            user.setAvatar(registerRequest.getAvatar());
+            user.setIdTown(registerRequest.getIdTown());
+            user.setAddress(registerRequest.getAddress());
+            user.setEnabled(false);
+            accountRepository.save(user);
 
-        roleForAccountService.addRoleForAccount(
-                accountRepository.findMovieAccountByUsername(registerRequest.getUsername()),
-                accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_USER));
-        String token = generateVerificationToken(user);
-        sendMailService.signup(user, token);
+            roleForAccountService.addRoleForAccount(
+                    accountRepository.findMovieAccountByUsername(registerRequest.getUsername()),
+                    accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_USER));
+            String token = generateVerificationToken(user);
+//            sendMailService.signup(user, token);
+            return user;
+        }
+        return null;
     }
 
     @Override
@@ -75,10 +83,8 @@ public class AuthServiceImpl implements AuthService {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtTokenProvider.generateToken(authenticate);
-        return new AuthenticationResponse(
-                token, loginRequest.getUsername(),
-                roleForAccountService.getRoleForAccount(
-                        accountService.getAccountByUsername(loginRequest.getUsername()).getId()));
+        Account account = accountService.getAccountByUsername(loginRequest.getUsername());
+        return new AuthenticationResponse(account.getId(), token, loginRequest.getUsername(), roleForAccountService.getRoleForAccount(account.getId()));
 
     }
 

@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,7 +23,7 @@ public class AccountMap {
                 account.getAvatar(),
                 account.getFirstname(),
                 account.getLastname(),
-                account.getBirthday().getTime(),
+                account.getBirthday(),
                 townMap.townToDTO(account.getIdTown()),
                 account.getAddress(),
                 account.getPhoneNumber(),
@@ -40,7 +39,7 @@ public class AccountMap {
         account.setAvatar(accountDTO.getAvatar());
         account.setFirstname(accountDTO.getFirstname());
         account.setLastname(accountDTO.getLastname());
-        account.setBirthday(new Date(accountDTO.getBirthday()));
+        account.setBirthday(accountDTO.getBirthday());
         account.setIdTown(townMap.DTOToTown(accountDTO.getTown()));
         account.setAddress(accountDTO.getAddress());
         account.setPhoneNumber(accountDTO.getPhoneNumber());

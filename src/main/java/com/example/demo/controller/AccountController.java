@@ -3,20 +3,20 @@ package com.example.demo.controller;
 import com.example.demo.DTO.AccountDTO;
 import com.example.demo.DTO.AccountPage;
 import com.example.demo.DTO.Password;
-import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.exception.MailException;
 import com.example.demo.exception.UsernameExitException;
 import com.example.demo.model.Account;
-import com.example.demo.model.utils.CheckEnabled;
 import com.example.demo.model.utils.PagingHeaders;
 import com.example.demo.model.utils.PagingResponse;
 import com.example.demo.service.AccountService;
+import com.example.demo.service.ImageService;
 import com.example.demo.util.AppConstants;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,6 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/acc")
 public class AccountController {
+    private final ImageService imageService;
     private final AccountService accountService;
 
     @GetMapping("/page")
@@ -32,23 +33,33 @@ public class AccountController {
         return accountService.getAllUsersPage(pageNo, pageSize, sortBy, sortDir);
     }
 
-    @PostMapping("/createAcc/{roleId}")
-    public ResponseEntity<RegisterRequest> createNewAccount(@RequestBody @Valid RegisterRequest registerRequest, @PathVariable int roleId) throws UsernameExitException, MailException {
-        return new ResponseEntity<>(accountService.createAccount(registerRequest, roleId), HttpStatus.CREATED);
+    @PostMapping("/createAcc")
+    public ResponseEntity<Account> createNewAccount(@RequestBody @Valid Account account) throws UsernameExitException, MailException {
+        return new ResponseEntity<>(accountService.createAccount(account), HttpStatus.CREATED);
+    }
+    @CrossOrigin("/**")
+    @PutMapping("saveImageAccount/{accId}")
+    public ResponseEntity<Boolean> saveImageAccount(@RequestParam("image")MultipartFile image, @PathVariable("accId") int accId) {
+        return new ResponseEntity<>(accountService.saveImageAcc(image, accId), HttpStatus.OK);
     }
 
     @GetMapping("/getAccoutByUsername/{username}")
     public ResponseEntity<AccountDTO> getAccout(@PathVariable String username) {
         return new ResponseEntity<>(accountService.getAccountByUsernameDTO(username), HttpStatus.OK);
     }
+    @GetMapping("getAccById/{accId}")
+    public ResponseEntity<AccountDTO> getAccById(@PathVariable("accId") int id){
+        return new ResponseEntity<>(accountService.getAccountById(id), HttpStatus.OK);
+    }
 
-    @PostMapping("/getListAccEnabled")
-    public ResponseEntity<List<AccountDTO>> getAccEnabled(@RequestBody CheckEnabled check) {
-        return new ResponseEntity<>(accountService.getAccountByEnabled(check.isCheckEnabled()), HttpStatus.OK);
+    @GetMapping("/getListAccEnabled/{status}")
+    public ResponseEntity<List<AccountDTO>> getAccEnabled(@PathVariable boolean status) {
+        return new ResponseEntity<>(accountService.getAccountByEnabled(status), HttpStatus.OK);
     }
 
     @PutMapping("/edit")
     public ResponseEntity<Account> editAccountByUsername(@RequestBody AccountDTO account) throws UsernameExitException, MailException {
+
         return new ResponseEntity<>(accountService.editAccountByUsername(account), HttpStatus.OK);
     }
 

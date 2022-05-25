@@ -2,15 +2,16 @@ package com.example.demo.service.IMPL;
 
 import com.example.demo.DTO.AccountDTO;
 import com.example.demo.DTO.AccountPage;
-import com.example.demo.DTO.RegisterRequest;
 import com.example.demo.exception.AccountExeption;
 import com.example.demo.exception.MailException;
 import com.example.demo.exception.UsernameExitException;
 import com.example.demo.map.AccountMap;
+import com.example.demo.map.address.TownMap;
 import com.example.demo.model.Account;
 import com.example.demo.model.AccountRole;
 import com.example.demo.model.Key.RoleForAccountKey;
 import com.example.demo.model.RoleForAccount;
+import com.example.demo.model.VerificationToken;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.AccountRoleRepository;
 import com.example.demo.service.*;
@@ -23,9 +24,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.example.demo.util.AppConstants.DEFAULT_IMAGE_ACCOUNTS;
+import static com.example.demo.util.DataUtils.changeFileName;
 
 @Service
 @AllArgsConstructor
@@ -39,6 +45,8 @@ public class AccountServiceImpl implements AccountService {
     private final UserHistoryService userHistoryService;
     private final VerificationTokenService verificationTokenService;
     private final MovieEvaluateService movieEvaluateService;
+    private final TownMap townMap;
+    private final ImageService imageService;
 
     @Override
     public List<AccountDTO> getAllAccounts() {
@@ -131,43 +139,82 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account editAccountByUsername(AccountDTO accountDTO) throws MailException {
-        Account account = accountRepository.findMovieAccountByUsername(accountDTO.getUsername());
+        Account account = accountRepository.findById(accountDTO.getId()).orElse(null);
+        assert account != null;
         if (checkEmail(accountDTO.getEmail(), account.getUsername()) != false) {
             throw new MailException("Email is exit");
         } else {
-            account.setLastname(accountDTO.getLastname());
+            if (accountDTO.getUsername() != null && (!account.getUsername().equals(accountDTO.getUsername()))) {
+                String newFile = changeFileName(account.getAvatar(), accountDTO.getUsername(), DEFAULT_IMAGE_ACCOUNTS);
+                if (newFile != null) {
+                    account.setAvatar(newFile);
+                }
+                account.setUsername(accountDTO.getUsername());
+            }
+            if (accountDTO.getPassword() != null) {
+                account.setPassword(accountDTO.getPassword());
+            }
+            account.setEnabled(accountDTO.isEnabled());
+            if (accountDTO.getEmail() != null) {
+                account.setEmail(accountDTO.getEmail());
+            }
+            if (accountDTO.getFirstname() != null) {
+                account.setFirstname(accountDTO.getFirstname());
+            }
+            if (accountDTO.getLastname() != null) {
+                account.setLastname(accountDTO.getLastname());
+            }
+            if (accountDTO.getBirthday() != null) {
+                account.setBirthday(accountDTO.getBirthday());
+            }
+            if (accountDTO.getTown() != null) {
+                account.setIdTown(townMap.DTOToTown(accountDTO.getTown()));
+            }
+            if (accountDTO.getAddress() != null) {
+                account.setAddress(accountDTO.getAddress());
+            }
+            if (accountDTO.getPhoneNumber() != null) {
+                account.setPhoneNumber(accountDTO.getPhoneNumber());
+            }
+            account.setGender(accountDTO.isGender());
             accountRepository.save(account);
-            System.out.println("\n\n\n\n\n\n\n bbbbbbbbbbbbbbbbbbbbbb: " + account.getLastname());
             return account;
         }
     }
 
     @Override
-    public RegisterRequest createAccount(RegisterRequest registerRequest, int roleId) throws
+    public Account createAccount(Account accountCreate) throws
             MailException, UsernameExitException {
         //check mail bang fasle => email không tồn tại
-        if (this.checkEmail(registerRequest.getEmail(), registerRequest.getUsername()) == false
-                && this.checkUsername(registerRequest.getUsername()) == false) {
+        if (this.checkEmail(accountCreate.getEmail(), accountCreate.getUsername()) == false
+                && this.checkUsername(accountCreate.getUsername()) == false) {
+            String gPass = DataUtils.generateTempPwd(8);
             Account account = new Account();
-            account.setUsername(registerRequest.getUsername());
-            account.setPassword(DataUtils.generateTempPwd(8));
-            account.setEmail(registerRequest.getEmail());
-            account.setLastname(registerRequest.getLastname());
-            account.setFirstname(registerRequest.getFirstname());
-            account.setBirthday(registerRequest.getBirthday());
-            account.setGender(registerRequest.isGender());
-            account.setAvatar(registerRequest.getAvatar());
-            account.setIdTown(registerRequest.getIdTown());
-            account.setAddress(registerRequest.getAddress());
+            account.setUsername(accountCreate.getUsername());
+            account.setPassword(gPass);
+            account.setEmail(accountCreate.getEmail());
+            account.setLastname(accountCreate.getLastname());
+            account.setFirstname(accountCreate.getFirstname());
+            account.setBirthday(accountCreate.getBirthday());
+            account.setGender(accountCreate.isGender());
+            account.setAvatar(null);
+            account.setIdTown(accountCreate.getIdTown());
+            account.setAddress(accountCreate.getAddress());
             account.setEnabled(true);
             accountRepository.save(account);
-            sendMailService.create(account, account.getPassword());
-            account.setPassword(passwordEncoder.encode(account.getPassword()));
+            account.setVerificationTokens(accountCreate.getVerificationTokens().stream().map(
+                    (verificationToken -> {
+                        Account accountToken = accountRepository.findMovieAccountByUsername(account.getUsername());
+                        VerificationToken verificationTokenNew = new VerificationToken();
+                        verificationTokenNew.setAccountInToken(accountToken);
+                        verificationTokenNew.setTokenContent(verificationToken.getTokenContent());
+                        verificationTokenNew.setCreatedTime(verificationToken.getCreatedTime());
+                        return verificationTokenNew;
+                    })
+            ).collect(Collectors.toList()));
             accountRepository.save(account);
-            roleForAccountService.addRoleForAccount(
-                    accountRepository.findMovieAccountByUsername(account.getUsername()),
-                    accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_USER));
-            return registerRequest;
+//            sendMailService.create(account, gPass);
+            return account;
         }
         return null;
     }
@@ -214,7 +261,16 @@ public class AccountServiceImpl implements AccountService {
         return null;
     }
 
-    private boolean checkEmail(String email, String username) throws MailException {
+    @Override
+    public boolean saveImageAcc(MultipartFile image, int accId) {
+        Account account = accountRepository.findById(accId).orElse(null);
+        assert account != null;
+        account.setAvatar(imageService.uploadImage(image, account.getUsername(), DEFAULT_IMAGE_ACCOUNTS));
+        accountRepository.save(account);
+        return true;
+    }
+
+    public boolean checkEmail(String email, String username) throws MailException {
         for (Account account : new ArrayList<>(accountRepository.findAll())) {
             if (!account.getUsername().equals(username) && email.equals(account.getEmail())) {
                 throw new MailException("User with email: " + email + " already existed");
@@ -223,7 +279,7 @@ public class AccountServiceImpl implements AccountService {
         return false;
     }
 
-    private boolean checkUsername(String username) throws UsernameExitException {
+    public boolean checkUsername(String username) throws UsernameExitException {
         for (Account userCheck : new ArrayList<>(accountRepository.findAll())) {
             if (username.equals(userCheck.getUsername())) {
                 throw new UsernameExitException("Username is exit");
@@ -231,7 +287,8 @@ public class AccountServiceImpl implements AccountService {
         }
         return false;
     }
-    private List<RoleForAccount> setDefaultRole(int accId){
+
+    private List<RoleForAccount> setDefaultRole(int accId) {
         List<RoleForAccount> roleForAccounts = new ArrayList<>();
         roleForAccounts.add(new RoleForAccount(
                 new RoleForAccountKey(accId, AppConstants.DEFAULT_ROLE_KEY_USER),

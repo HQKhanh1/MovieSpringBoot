@@ -13,7 +13,7 @@ public class DistrictDTO {
 
     private String genre;
 
-    private CityDTO cityDTO;
+    private int cityId;
 
 
 }

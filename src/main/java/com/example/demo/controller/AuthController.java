@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.DTO.AuthenticationResponse;
 import com.example.demo.DTO.LoginRequest;
 import com.example.demo.DTO.RegisterRequest;
+import com.example.demo.exception.MailException;
+import com.example.demo.exception.UsernameExitException;
+import com.example.demo.model.Account;
 import com.example.demo.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +19,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
-        authService.signup(registerRequest);
-        return new ResponseEntity<>("User Registration Successful!", HttpStatus.OK);
+    public ResponseEntity<Account> signup(@RequestBody RegisterRequest registerRequest) throws UsernameExitException, MailException {
+        return new ResponseEntity<>(authService.signup(registerRequest), HttpStatus.OK);
     }
 
     @GetMapping("/accountVerification/{token}")

@@ -11,5 +11,5 @@ public class TownDTO {
     private int id;
     private String name;
     private String genre;
-    private DistrictDTO districtDTO;
+    private int districtId;
 }

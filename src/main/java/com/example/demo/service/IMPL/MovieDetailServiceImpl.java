@@ -8,7 +8,6 @@ import com.example.demo.map.MovieGenreMap;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.*;
-import com.nimbusds.jose.shaded.json.JSONArray;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -82,8 +81,6 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     public MovieDetail editMovieDetail(MovieDetail movieDetailDTO) throws Exception {
         assert movieDetailDTO.getId() != null;
         MovieDetail movieDetail = movieDetailRepository.getById(movieDetailDTO.getId());
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAA: " + movieDetail.getId());
-        System.out.println("\n\n\n\nJJJJJJJJJJJJJJJJJJJJ: " + JSONArray.toJSONString(movieDetailDTO.getFkGenres()));
         if (checkExitTitle(movieDetailDTO.getTitle(), movieDetail.getId())) {
             throw new Exception("Movie not found!");
         } else {
@@ -96,7 +93,6 @@ public class MovieDetailServiceImpl implements MovieDetailService {
             movieDetail.setReleaseDate(movieDetailDTO.getReleaseDate());
             movieDetail.setMovieDuration(movieDetailDTO.getMovieDuration());
             movieDetail.setViewNumber(movieDetailDTO.getViewNumber());
-            System.out.println("\n\n\n\n\n\n\nView number");
             if (movieDetailDTO.getMovieEvaluates() != null) {
                 movieDetail.setMovieEvaluates(movieDetailDTO.getMovieEvaluates().stream().map(movieEvaluate -> {
                     MovieDetail movieDetailEvaluate = movieDetailRepository.getById(movieEvaluate.getId().getMovieId());
@@ -111,7 +107,6 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                     return newEvaluate;
                 }).collect(Collectors.toList()));
             }
-            System.out.println("\n\n\n\n\n\n\nEvaluate");
             if (movieDetailDTO.getFkCasts() != null) {
                 movieDetail.setFkCasts(movieDetailDTO.getFkCasts().stream().map(fkCast -> {
                     MovieDetail movieDetailCast = movieDetailRepository.getById(fkCast.getId().getMovieId());
@@ -119,15 +114,12 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                     FKCast newFkCast = new FKCast();
                     newFkCast.setMovieDetail(movieDetailCast);
                     newFkCast.setMovieCast(movieCast);
+                    newFkCast.setCastCharacter(fkCast.getCastCharacter());
                     return newFkCast;
                 }).collect(Collectors.toList()));
             }
-            System.out.println("\n\n\n\n\n\n\nFKCast");
             if (movieDetailDTO.getFkGenres() != null) {
                 movieDetail.setFkGenres(movieDetailDTO.getFkGenres().stream().map(fkGenre -> {
-
-                    System.out.println("\n\nGENRE: " + fkGenre.getId().getGenreId() + "============================================");
-
                     MovieDetail movieDetailGenre = movieDetailRepository.getById(fkGenre.getId().getMovieId());
                     MovieGenre movieGenre = movieGenreRepository.getById(fkGenre.getId().getGenreId());
                     FKGenre newFKGenre = new FKGenre();

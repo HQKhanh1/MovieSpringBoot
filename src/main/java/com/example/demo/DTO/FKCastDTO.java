@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FKCastDTO {
     private int movieDetailId;
-
     private int movieCastId;
+    private String castCharacter;
 }

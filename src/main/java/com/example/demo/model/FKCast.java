@@ -18,6 +18,9 @@ public class FKCast {
     @EmbeddedId
     private FkCastKey id = new FkCastKey();
 
+    @Column(name = "cast_character")
+    private String castCharacter;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("movieId")
     @JoinColumn(name = "movie_id")
