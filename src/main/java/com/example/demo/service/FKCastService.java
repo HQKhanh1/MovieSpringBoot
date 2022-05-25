@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.DTO.FKCastDTO;
 import com.example.demo.DTO.MovieCastDTO;
 import com.example.demo.DTO.MovieDetailDTO;
 
@@ -15,4 +16,6 @@ public interface FKCastService {
     void deleteFkCastByCastId(int castId);
 
     void deleteFkCastByMovieId(int movieDetailId);
+
+    List<FKCastDTO> getAllFKCast();
 }

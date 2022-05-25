@@ -1,7 +1,9 @@
 package com.example.demo.service.IMPL;
 
+import com.example.demo.DTO.FKCastDTO;
 import com.example.demo.DTO.MovieCastDTO;
 import com.example.demo.DTO.MovieDetailDTO;
+import com.example.demo.map.FKCastMap;
 import com.example.demo.map.MovieCastMap;
 import com.example.demo.map.MovieDetailMap;
 import com.example.demo.model.FKCast;
@@ -17,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class FKCastServiceImpl implements FKCastService {
     private final FKCastRepository fkCastRepository;
+    private final FKCastMap fkCastMap;
     private final MovieCastMap movieCastMap;
     private final MovieDetailMap movieDetailMap;
 
@@ -62,5 +65,10 @@ public class FKCastServiceImpl implements FKCastService {
                 fkCastRepository.delete(fkCast);
             }
         });
+    }
+
+    @Override
+    public List<FKCastDTO> getAllFKCast() {
+        return fkCastMap.fkCastDTOList(fkCastRepository.findAll());
     }
 }

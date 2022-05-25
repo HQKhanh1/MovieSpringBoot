@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.FKCastDTO;
 import com.example.demo.DTO.MovieCastDTO;
 import com.example.demo.DTO.MovieDetailDTO;
 import com.example.demo.service.FKCastService;
@@ -18,6 +19,11 @@ import java.util.List;
 @RequestMapping("/api/fkCast")
 public class FKCastController {
     private final FKCastService fkCastService;
+
+    @GetMapping("/getAllFkCast")
+    public ResponseEntity<List<FKCastDTO>> getAllFkCast(){
+        return new ResponseEntity<>(fkCastService.getAllFKCast(), HttpStatus.OK);
+    }
 
     // get all movie on a cast
     @GetMapping("/movie/{castId}")
