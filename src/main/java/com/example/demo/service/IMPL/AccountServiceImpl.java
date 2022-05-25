@@ -6,7 +6,6 @@ import com.example.demo.exception.AccountExeption;
 import com.example.demo.exception.MailException;
 import com.example.demo.exception.UsernameExitException;
 import com.example.demo.map.AccountMap;
-import com.example.demo.map.address.TownMap;
 import com.example.demo.model.Account;
 import com.example.demo.model.AccountRole;
 import com.example.demo.model.Key.RoleForAccountKey;
@@ -14,6 +13,7 @@ import com.example.demo.model.RoleForAccount;
 import com.example.demo.model.VerificationToken;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.AccountRoleRepository;
+import com.example.demo.repository.address.TownRepository;
 import com.example.demo.service.*;
 import com.example.demo.util.AppConstants;
 import com.example.demo.util.DataUtils;
@@ -45,8 +45,8 @@ public class AccountServiceImpl implements AccountService {
     private final UserHistoryService userHistoryService;
     private final VerificationTokenService verificationTokenService;
     private final MovieEvaluateService movieEvaluateService;
-    private final TownMap townMap;
     private final ImageService imageService;
+    private final TownRepository townRepository;
 
     @Override
     public List<AccountDTO> getAllAccounts() {
@@ -167,8 +167,8 @@ public class AccountServiceImpl implements AccountService {
             if (accountDTO.getBirthday() != null) {
                 account.setBirthday(accountDTO.getBirthday());
             }
-            if (accountDTO.getTown() != null) {
-                account.setIdTown(townMap.DTOToTown(accountDTO.getTown()));
+            if (accountDTO.getTown() == null) {
+                account.setIdTown(townRepository.getById(accountDTO.getTown()));
             }
             if (accountDTO.getAddress() != null) {
                 account.setAddress(accountDTO.getAddress());

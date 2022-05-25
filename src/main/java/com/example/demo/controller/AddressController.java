@@ -12,6 +12,7 @@ import com.example.demo.repository.address.TownRepository;
 import com.example.demo.service.addressService.CityService;
 import com.example.demo.service.addressService.DistrictService;
 import com.example.demo.service.addressService.TownService;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,18 +54,18 @@ public class AddressController {
     }
 
     @GetMapping("/getAddressByTownId/{id}")
-    public ResponseEntity<List<Object>> getAddresNyTownId(@PathVariable("id") int id) {
-        List<Object> address = new ArrayList<>();
+    public ResponseEntity<JSONObject> getAddresNyTownId(@PathVariable("id") int id) {
+        JSONObject address = new JSONObject();
         TownDTO townDTO = townMap.townToDTO(townRepository.findById(id).orElse(null));
         List<TownDTO> townDTOs = districtService.getTownByDistrictId(townDTO.getDistrictId());
         DistrictDTO districtDTO = districtMap.districtToDTO(districtRepository.findById(townDTO.getDistrictId()).orElse(null));
         List<DistrictDTO> districtDTOS = cityService.getDistrictsByCity(districtDTO.getCityId());
         CityDTO cityDTO = cityMap.cityToDTO(Objects.requireNonNull(cityRepository.findById(districtDTO.getCityId()).orElse(null)));
-        address.add(townDTO);
-        address.add(townDTOs);
-        address.add(districtDTO);
-        address.add(districtDTOS);
-        address.add(cityDTO);
+        address.put("townDTO", townDTO);
+        address.put("townDTOs", townDTOs);
+        address.put("districtDTO", districtDTO);
+        address.put("districtDTOS", districtDTOS);
+        address.put("cityDTO", cityDTO);
         return new ResponseEntity<>(address, HttpStatus.OK);
     }
 }

@@ -1,6 +1,5 @@
 package com.example.demo.DTO;
 
-import com.example.demo.DTO.address.TownDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ public class AccountDTO {
     private String firstname;
     private String lastname;
     private Date birthday;
-    private TownDTO town;
+    private Integer town;
     private String address;
     private String phoneNumber;
     private boolean gender;
