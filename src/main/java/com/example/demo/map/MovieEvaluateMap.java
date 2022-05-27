@@ -11,11 +11,11 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class MovieEvaluateMap {
-    private final AccountMap accountMap;
     private final MovieDetailMap movieDetailMap;
+    private final AccountMap accountMap;
     public MovieEvaluateDTO movieEvaluateToDTO(MovieEvaluate movieEvaluate) {
-        return new MovieEvaluateDTO(movieEvaluate.getMovieDetail().getId(),
-                movieEvaluate.getAccountDetail().getId(),
+        return new MovieEvaluateDTO(movieDetailMap.movieDetailToDTO(movieEvaluate.getMovieDetail()),
+                accountMap.accountToDTO(movieEvaluate.getAccountDetail()),
                 movieEvaluate.getEvaluateTime(),
                 movieEvaluate.getEvaluateContent(),
                 movieEvaluate.getEvaluateRate());

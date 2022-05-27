@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovieRate {
-    private MovieDetailDTO movieDetailDTO;
+    private Integer movieDetailDTO;
     private double rate;
 
 }

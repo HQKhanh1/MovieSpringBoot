@@ -81,9 +81,15 @@ public class MovieDetailController {
         return new ResponseEntity<>(movieDetailService.search(searchQuery), HttpStatus.OK);
 
     }
-    @GetMapping("/loadEvaluate")
-        public ResponseEntity<List<MovieEvaluateDTO>> loadEvaluate(@RequestParam int movieId, @RequestParam int accId) {
-        return new ResponseEntity<>(movieDetailService.loadEvaluate(movieId, accId), HttpStatus.OK);
+
+    @GetMapping("/loadEvaluateInMovie/{idMovie}")
+    public ResponseEntity<List<MovieEvaluateDTO>> loadEvaluateInMovie(@PathVariable("idMovie") int movieId) {
+        return new ResponseEntity<>(movieDetailService.loadEvaluate(movieId), HttpStatus.OK);
+    }
+
+    @GetMapping("/loadEvaluateInAccount/{idAcc}")
+    public ResponseEntity<List<MovieEvaluateDTO>> loadEvaluateInAccount(@PathVariable("idAcc") int accId) {
+        return new ResponseEntity<>(movieDetailService.loadEvaluateInAcc(accId), HttpStatus.OK);
     }
 
 }

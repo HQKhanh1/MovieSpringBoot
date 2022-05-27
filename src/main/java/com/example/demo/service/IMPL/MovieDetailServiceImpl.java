@@ -173,7 +173,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
         List<MovieDetail> movieDetails = movieDetailRepository.findAll();
         for (MovieDetail movieDetail : movieDetails) {
             if (movieDetail.getMovieEvaluates().isEmpty()) {
-                movieRates.add(new MovieRate(movieDetailMap.movieDetailToDTO(movieDetail), 0.0));
+                movieRates.add(new MovieRate(movieDetail.getId(), 0.0));
             } else {
                 movieRates.add(getRateMovie(movieDetail.getId()));
             }
@@ -196,9 +196,9 @@ public class MovieDetailServiceImpl implements MovieDetailService {
             }
         }
         if (countMovie != 0) {
-            return new MovieRate(movieDetailDTO, ((double) sumRate / (double) countMovie));
+            return new MovieRate(movieDetailDTO.getId(), ((double) sumRate / (double) countMovie));
         } else {
-            return new MovieRate(movieDetailDTO, 0.0);
+            return new MovieRate(movieDetailDTO.getId(), 0.0);
         }
     }
 
@@ -236,11 +236,23 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     }
 
     @Override
-    public List<MovieEvaluateDTO> loadEvaluate(int movieId, int accId) {
+    public List<MovieEvaluateDTO> loadEvaluate(int movieId) {
         List<MovieEvaluate> movieEvaluates = movieEvaluateService.getMovieEvaluates();
         List<MovieEvaluateDTO> movieEvaluateDTOS = new ArrayList<>();
         for (MovieEvaluate movieEvaluate : movieEvaluates) {
             if (movieEvaluate.getId().getMovieId() == movieId) {
+                movieEvaluateDTOS.add(movieEvaluateMap.movieEvaluateToDTO(movieEvaluate));
+            }
+        }
+        return movieEvaluateDTOS;
+    }
+
+    @Override
+    public List<MovieEvaluateDTO> loadEvaluateInAcc(int accId) {
+        List<MovieEvaluate> movieEvaluates = movieEvaluateService.getMovieEvaluates();
+        List<MovieEvaluateDTO> movieEvaluateDTOS = new ArrayList<>();
+        for (MovieEvaluate movieEvaluate : movieEvaluates) {
+            if (movieEvaluate.getId().getUserId() == accId) {
                 movieEvaluateDTOS.add(movieEvaluateMap.movieEvaluateToDTO(movieEvaluate));
             }
         }

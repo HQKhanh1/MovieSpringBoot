@@ -31,5 +31,7 @@ public interface MovieDetailService {
 
     List<MovieDetailDTO> search(String searchQuery);
 
-    List<MovieEvaluateDTO> loadEvaluate(int movieId, int accId);
+    List<MovieEvaluateDTO> loadEvaluate(int movieId);
+
+    List<MovieEvaluateDTO> loadEvaluateInAcc(int accId);
 }

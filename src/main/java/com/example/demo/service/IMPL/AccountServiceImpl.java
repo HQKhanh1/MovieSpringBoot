@@ -151,32 +151,32 @@ public class AccountServiceImpl implements AccountService {
                 }
                 account.setUsername(accountDTO.getUsername());
             }
-            if (accountDTO.getPassword() != null) {
+            if (accountDTO.getPassword() != null && (!accountDTO.getPassword().equals(account.getPassword()))) {
                 account.setPassword(accountDTO.getPassword());
             }
             account.setEnabled(accountDTO.isEnabled());
-            if (accountDTO.getEmail() != null) {
+            if (accountDTO.getEmail() != null && (!accountDTO.getEmail().equals(account.getEmail()))) {
                 account.setEmail(accountDTO.getEmail());
             }
-            if (accountDTO.getFirstname() != null) {
+            if (accountDTO.getFirstname() != null && (!accountDTO.getFirstname().equals(account.getFirstname()))) {
                 account.setFirstname(accountDTO.getFirstname());
             }
-            if (accountDTO.getLastname() != null) {
+            if (accountDTO.getLastname() != null && (!accountDTO.getLastname().equals(account.getLastname()))) {
                 account.setLastname(accountDTO.getLastname());
             }
             if (accountDTO.getBirthday() != null) {
+                System.out.println("\n\n\n\n\n BIRTHDAY: " + accountDTO.getBirthday());
                 account.setBirthday(accountDTO.getBirthday());
             }
-            if (accountDTO.getTown() == null) {
+            if (accountDTO.getTown() == null && (accountDTO.getTown() == account.getIdTown().getId())) {
                 account.setIdTown(townRepository.getById(accountDTO.getTown()));
             }
-            if (accountDTO.getAddress() != null) {
+            if (accountDTO.getAddress() != null && (!accountDTO.getAddress().equals(account.getAddress()))) {
                 account.setAddress(accountDTO.getAddress());
             }
-            if (accountDTO.getPhoneNumber() != null) {
+            if (accountDTO.getPhoneNumber() != null && (!accountDTO.getPhoneNumber().equals(account.getPhoneNumber()))) {
                 account.setPhoneNumber(accountDTO.getPhoneNumber());
             }
-            account.setGender(accountDTO.isGender());
             accountRepository.save(account);
             return account;
         }
