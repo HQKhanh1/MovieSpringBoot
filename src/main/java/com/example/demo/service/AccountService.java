@@ -30,7 +30,7 @@ public interface AccountService {
 
     String deleteAccountByUsername(String username);
 
-    Account editAccountByUsername(AccountDTO account) throws UsernameExitException, MailException;
+    AccountDTO editAccountByUsername(AccountDTO account) throws UsernameExitException, MailException;
 
     Account createAccount(Account account) throws MailException, UsernameExitException;
 

@@ -138,7 +138,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account editAccountByUsername(AccountDTO accountDTO) throws MailException {
+    public AccountDTO editAccountByUsername(AccountDTO accountDTO) throws MailException {
         Account account = accountRepository.findById(accountDTO.getId()).orElse(null);
         assert account != null;
         if (checkEmail(accountDTO.getEmail(), account.getUsername()) != false) {
@@ -165,10 +165,9 @@ public class AccountServiceImpl implements AccountService {
                 account.setLastname(accountDTO.getLastname());
             }
             if (accountDTO.getBirthday() != null) {
-                System.out.println("\n\n\n\n\n BIRTHDAY: " + accountDTO.getBirthday());
                 account.setBirthday(accountDTO.getBirthday());
             }
-            if (accountDTO.getTown() == null && (accountDTO.getTown() == account.getIdTown().getId())) {
+            if (accountDTO.getTown() != null && (accountDTO.getTown() != account.getIdTown().getId())) {
                 account.setIdTown(townRepository.getById(accountDTO.getTown()));
             }
             if (accountDTO.getAddress() != null && (!accountDTO.getAddress().equals(account.getAddress()))) {
@@ -177,8 +176,11 @@ public class AccountServiceImpl implements AccountService {
             if (accountDTO.getPhoneNumber() != null && (!accountDTO.getPhoneNumber().equals(account.getPhoneNumber()))) {
                 account.setPhoneNumber(accountDTO.getPhoneNumber());
             }
+            if (accountDTO.getGender() != null && (accountDTO.getGender() != account.isGender())) {
+                account.setGender(accountDTO.getGender());
+            }
             accountRepository.save(account);
-            return account;
+            return accountDTO;
         }
     }
 

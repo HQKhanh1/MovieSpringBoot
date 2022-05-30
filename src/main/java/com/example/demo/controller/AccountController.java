@@ -57,7 +57,7 @@ public class AccountController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Account> editAccountByUsername(@RequestBody AccountDTO account) throws UsernameExitException, MailException {
+    public ResponseEntity<AccountDTO> editAccountByUsername(@RequestBody AccountDTO account) throws UsernameExitException, MailException {
 
         return new ResponseEntity<>(accountService.editAccountByUsername(account), HttpStatus.OK);
     }

@@ -24,7 +24,6 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public String uploadImage(MultipartFile multipartFile, String fileName, int type) {
         String extension = getExtension(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        System.out.println("Client File Name = " + extension);
         File fileRootDir = new File("./");
         if (type == DEFAULT_IMAGE_ACCOUNTS) {
             fileRootDir = new File(DEFAULT_URL_DATA_IMAGE_ACCOUNT);

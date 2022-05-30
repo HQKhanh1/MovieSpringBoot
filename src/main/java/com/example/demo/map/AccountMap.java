@@ -43,7 +43,7 @@ public class AccountMap {
         account.setIdTown(townRepository.getById(accountDTO.getTown()));
         account.setAddress(accountDTO.getAddress());
         account.setPhoneNumber(accountDTO.getPhoneNumber());
-        account.setGender(accountDTO.isGender());
+        account.setGender(accountDTO.getGender());
         return account;
     }
 

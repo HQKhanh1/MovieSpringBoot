@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-@CrossOrigin("http://localhost:4200/")
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/movieDetail")

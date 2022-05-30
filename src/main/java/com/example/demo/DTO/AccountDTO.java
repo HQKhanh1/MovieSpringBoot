@@ -22,5 +22,5 @@ public class AccountDTO {
     private Integer town;
     private String address;
     private String phoneNumber;
-    private boolean gender;
+    private Boolean gender;
 }

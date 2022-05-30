@@ -11,10 +11,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class UserHistoryDTO {
     private int id;
-    //    @ManyToOne(fetch = FetchType.LAZY)
-    private int user;
-    //    @ManyToOne(fetch = FetchType.LAZY)
-    private int movie;
+    private Integer user;
+    private Integer movie;
     private Date historyDate;
 
 }
