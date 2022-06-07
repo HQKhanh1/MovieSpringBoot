@@ -68,6 +68,10 @@ public class MovieDetailController {
     public ResponseEntity<MovieDetail> editMovieDetail(@RequestBody MovieDetail movieDetailDTO) throws Exception {
         return new ResponseEntity<>(movieDetailService.editMovieDetail(movieDetailDTO), HttpStatus.OK);
     }
+    @PutMapping("/saveEvaluate")
+    public ResponseEntity<MovieEvaluateDTO> saveEvaluate(@RequestBody MovieEvaluateDTO movieEvaluateDTO) throws Exception {
+        return new ResponseEntity<>(movieDetailService.saveEvaluate(movieEvaluateDTO), HttpStatus.OK);
+    }
 
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<MovieDetail> removeMovie(@PathVariable int id) throws Exception {

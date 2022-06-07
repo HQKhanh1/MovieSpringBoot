@@ -18,8 +18,8 @@ public class MailConfig {
 
     @Value("dangtinnhatroCongNghePhanMem@gmail.com")
     private String email;
-
-    @Value("@abcABC123")
+//    @abcABC123
+    @Value("cfnriaczwzwprutd")
     private String password;
 
     @Value("true")

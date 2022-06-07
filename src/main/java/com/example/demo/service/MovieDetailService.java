@@ -34,4 +34,6 @@ public interface MovieDetailService {
     List<MovieEvaluateDTO> loadEvaluate(int movieId);
 
     List<MovieEvaluateDTO> loadEvaluateInAcc(int accId);
+
+    MovieEvaluateDTO saveEvaluate(MovieEvaluateDTO movieEvaluateDTO);
 }

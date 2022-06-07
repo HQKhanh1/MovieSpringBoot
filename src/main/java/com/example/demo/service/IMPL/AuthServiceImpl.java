@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
                     accountRepository.findMovieAccountByUsername(registerRequest.getUsername()),
                     accountRoleRepository.getById(AppConstants.DEFAULT_ROLE_KEY_USER));
             String token = generateVerificationToken(user);
-//            sendMailService.signup(user, token);
+            sendMailService.signup(user, token);
             return user;
         }
         return null;

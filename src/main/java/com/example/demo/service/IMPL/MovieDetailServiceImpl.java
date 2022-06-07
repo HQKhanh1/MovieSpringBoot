@@ -72,17 +72,31 @@ public class MovieDetailServiceImpl implements MovieDetailService {
 
     @Override
     public MovieDetailDTO addMovieDetail(MovieDetail movieDetail) throws Exception {
-        movieDetailRepository.save(movieDetail);
-        return movieDetailMap.movieDetailToDTO(movieDetail);
+        if (checkExitTitleAddMovie(movieDetail.getTitle())) {
+            throw new Exception("The title of the movie already exists!");
+        } else {
+            movieDetailRepository.save(movieDetail);
+            return movieDetailMap.movieDetailToDTO(movieDetail);
+        }
 
+    }
+
+    private boolean checkExitTitleAddMovie(String title) {
+        List<MovieDetail> movieDetails = movieDetailRepository.findAll();
+        for (MovieDetail movieDetail : movieDetails) {
+            if (movieDetail.getTitle().equals(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public MovieDetail editMovieDetail(MovieDetail movieDetailDTO) throws Exception {
         assert movieDetailDTO.getId() != null;
         MovieDetail movieDetail = movieDetailRepository.getById(movieDetailDTO.getId());
-        if (checkExitTitle(movieDetailDTO.getTitle(), movieDetail.getId())) {
-            throw new Exception("Movie not found!");
+        if (checkExitTitleEditMovie(movieDetailDTO.getTitle(), movieDetail.getId())) {
+            throw new Exception("The title of the movie already exists!");
         } else {
             movieDetail.setTitle(movieDetailDTO.getTitle());
             movieDetail.setPoster(movieDetailDTO.getPoster());
@@ -96,7 +110,6 @@ public class MovieDetailServiceImpl implements MovieDetailService {
             if (movieDetailDTO.getMovieEvaluates() != null) {
                 movieDetail.setMovieEvaluates(movieDetailDTO.getMovieEvaluates().stream().map(movieEvaluate -> {
                     MovieDetail movieDetailEvaluate = movieDetailRepository.getById(movieEvaluate.getId().getMovieId());
-                    System.out.println("\n\n\n\n\n\n\nmovieDetailEvaluate " + movieDetailEvaluate.getId());
                     Account account = accountRepository.getById(movieEvaluate.getId().getUserId());
                     MovieEvaluate newEvaluate = new MovieEvaluate();
                     newEvaluate.setMovieDetail(movieDetailEvaluate);
@@ -128,7 +141,6 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                     return newFKGenre;
                 }).collect(Collectors.toList()));
             }
-            System.out.println("\n\n\n\n\n\n\nFKGenre");
             if (movieDetailDTO.getFkDirectors() != null) {
                 movieDetail.setFkDirectors(movieDetailDTO.getFkDirectors().stream().map(fkDirector -> {
                     MovieDetail movieDetailCast = movieDetailRepository.getById(fkDirector.getId().getMovieId());
@@ -139,9 +151,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                     return newFkDirector;
                 }).collect(Collectors.toList()));
             }
-            System.out.println("\n\n\n\n\n\n\nFKDirector");
             movieDetailRepository.save(movieDetail);
-            System.out.println("\n\n\n\n\n\n\nXong ròi nè");
             return movieDetailDTO;
         }
 
@@ -259,15 +269,36 @@ public class MovieDetailServiceImpl implements MovieDetailService {
         return movieEvaluateDTOS;
     }
 
-    public boolean checkExitTitle(String title, int id) {
+    @Override
+    public MovieEvaluateDTO saveEvaluate(MovieEvaluateDTO movieEvaluateDTO) {
+        MovieDetail movieDetail = movieDetailRepository.getById(movieEvaluateDTO.getMovieId());
+        MovieEvaluate movieEvaluate = movieEvaluateMap.dTOToMovieEvaluate(movieEvaluateDTO);
+        List<MovieEvaluate> movieEvaluates = new ArrayList<>();
+        if (movieDetail.getMovieEvaluates() != null) {
+            movieEvaluates = movieDetail.getMovieEvaluates();
+            for (MovieEvaluate movieEvaluateCheck : movieEvaluates) {
+                if ((movieEvaluateCheck.getId().getUserId() == movieEvaluate.getId().getUserId()) &&
+                        (movieEvaluateCheck.getId().getMovieId() == movieEvaluate.getId().getMovieId())) {
+                    movieEvaluateService.editEvaluate(movieEvaluate);
+                    return movieEvaluateDTO;
+                }
+            }
+            movieEvaluates.add(movieEvaluate);
+        } else {
+            movieEvaluates.add(movieEvaluate);
+        }
+        movieDetail.setMovieEvaluates(movieEvaluates);
+        movieDetailRepository.save(movieDetail);
+        return movieEvaluateDTO;
+    }
+
+    public boolean checkExitTitleEditMovie(String title, int id) {
         List<MovieDetail> movieDetails = movieDetailRepository.findAll();
         for (MovieDetail movieDetail : movieDetails) {
             if (movieDetail.getTitle().equals(title) && (id != movieDetail.getId())) {
-                System.out.println("\n\n\n\n\n\n\nTTTTTTTTTTTTTTTTTTTTTTTT: " + title);
                 return true;
             }
         }
-        System.out.println("\n\n\n\n\n\n\nHHHHHHHHHHHHHHHHHHHH: " + title);
         return false;
     }
 }

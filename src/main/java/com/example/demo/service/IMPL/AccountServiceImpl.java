@@ -17,6 +17,7 @@ import com.example.demo.repository.address.TownRepository;
 import com.example.demo.service.*;
 import com.example.demo.util.AppConstants;
 import com.example.demo.util.DataUtils;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -76,12 +77,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO getAccountById(int accountId) {
-        Account account = accountRepository.findById(accountId).orElse(null);
-        if (account == null) {
-            throw new AccountExeption("Account not found");
-        } else {
-            return accountMap.accountToDTO(account);
-        }
+        Account account = accountRepository.getById(accountId);
+        return accountMap.accountToDTO(account);
     }
 
     @Override
@@ -267,7 +264,8 @@ public class AccountServiceImpl implements AccountService {
     public boolean saveImageAcc(MultipartFile image, int accId) {
         Account account = accountRepository.findById(accId).orElse(null);
         assert account != null;
-        account.setAvatar(imageService.uploadImage(image, account.getUsername(), DEFAULT_IMAGE_ACCOUNTS));
+        JSONObject path = imageService.uploadImage(image, account.getUsername(), DEFAULT_IMAGE_ACCOUNTS);
+        account.setAvatar(path.getAsString("path"));
         accountRepository.save(account);
         return true;
     }

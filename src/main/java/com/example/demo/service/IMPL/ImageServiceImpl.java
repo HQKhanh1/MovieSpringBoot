@@ -1,9 +1,9 @@
 package com.example.demo.service.IMPL;
 
-import com.example.demo.model.Account;
 import com.example.demo.model.ImageModel;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.service.ImageService;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +22,8 @@ import static org.apache.lucene.index.IndexFileNames.getExtension;
 public class ImageServiceImpl implements ImageService {
     private final AccountRepository accountRepository;
     @Override
-    public String uploadImage(MultipartFile multipartFile, String fileName, int type) {
+    public JSONObject uploadImage(MultipartFile multipartFile, String fileName, int type) {
+        JSONObject path = new JSONObject();
         String extension = getExtension(Objects.requireNonNull(multipartFile.getOriginalFilename()));
         File fileRootDir = new File("./");
         if (type == DEFAULT_IMAGE_ACCOUNTS) {
@@ -43,19 +44,17 @@ public class ImageServiceImpl implements ImageService {
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
             stream.write(multipartFile.getBytes());
             stream.close();
-            System.out.println("Write file: " + serverFile.getPath());
-            return "." + getExtension(serverFile.getPath());
+            path.put("path", "." + getExtension(serverFile.getPath()));
+            return path;
         } catch (Exception e) {
             return null;
         }
     }
 
     @Override
-    public ImageModel getImage(int id) {
+    public ImageModel getImage(String url) {
         ImageModel imageModel = new ImageModel();
-        Account account = accountRepository.findById(id).orElse(null);
-        assert account != null;
-        File file = new File(account.getAvatar());
+        File file = new File(url);
         if (file.exists()){
             imageModel.setImgName(file.getName());
             imageModel.setUrl(decompressZLib(file));

@@ -32,7 +32,6 @@ public class DirectorController {
     //create a director
     @PostMapping("/create")
     public ResponseEntity<MovieDirectorDTO> createDirector(@RequestBody MovieDirectorDTO movieDirectorDTO) {
-        System.out.println("\n\n\n\n" + movieDirectorDTO.getBirthday());
         return new ResponseEntity<>(movieDirectorService.createMovieDirector(movieDirectorDTO), HttpStatus.OK);
     }
 

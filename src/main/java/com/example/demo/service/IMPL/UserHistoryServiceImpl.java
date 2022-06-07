@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -40,11 +41,25 @@ public class UserHistoryServiceImpl implements UserHistoryService {
 
     @Override
     public UserHistoryDTO addHistory(Integer idAcc, Integer idMovie) {
-        UserHistory userHistory = new UserHistory();
-        userHistory.setUser(accountRepository.getById(idAcc));
-        userHistory.setMovie(movieDetailRepository.getById(idMovie));
-        userHistory.setHistoryDate(new Date());
-        userHistoryRepository.save(userHistory);
+        List<UserHistory> userHistories = userHistoryRepository.findAll();
+        UserHistory userHistory = null;
+        Date date = new Date();
+        for (UserHistory userHistoryCheck : userHistories) {
+            if (Objects.equals(userHistoryCheck.getUser().getId(), idAcc) && Objects.equals(userHistoryCheck.getMovie().getId(), idMovie)) {
+                userHistory = userHistoryCheck;
+                userHistory.setUser(accountRepository.getById(idAcc));
+                userHistory.setMovie(movieDetailRepository.getById(idMovie));
+                userHistory.setHistoryDate(date);
+                userHistoryRepository.save(userHistory);
+            }
+        }
+        if (userHistory != null) {
+            userHistory.setUser(accountRepository.getById(idAcc));
+            userHistory.setMovie(movieDetailRepository.getById(idMovie));
+            userHistory.setHistoryDate(date);
+            userHistoryRepository.save(userHistory);
+        }
+        assert userHistory != null;
         return userHistoryMap.userHistoryToDTO(userHistory);
     }
 

@@ -29,7 +29,6 @@ public class JwtTokenProvider {
 
     public String generateToken(Authentication authentication) {
         User principal = (User) authentication.getPrincipal();
-        System.out.println();
         return Jwts.builder()
                 .setSubject(principal.getUsername())
                 .signWith(getPrivateKey())

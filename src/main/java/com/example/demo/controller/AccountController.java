@@ -37,7 +37,7 @@ public class AccountController {
     public ResponseEntity<Account> createNewAccount(@RequestBody @Valid Account account) throws UsernameExitException, MailException {
         return new ResponseEntity<>(accountService.createAccount(account), HttpStatus.CREATED);
     }
-    @PutMapping("saveImageAccount/{accId}")
+    @PutMapping("/saveImageAccount/{accId}")
     public ResponseEntity<Boolean> saveImageAccount(@RequestParam("image")MultipartFile image, @PathVariable("accId") int accId) {
         return new ResponseEntity<>(accountService.saveImageAcc(image, accId), HttpStatus.OK);
     }
@@ -46,7 +46,7 @@ public class AccountController {
     public ResponseEntity<AccountDTO> getAccout(@PathVariable String username) {
         return new ResponseEntity<>(accountService.getAccountByUsernameDTO(username), HttpStatus.OK);
     }
-    @GetMapping("getAccById/{accId}")
+    @GetMapping("/getAccById/{accId}")
     public ResponseEntity<AccountDTO> getAccById(@PathVariable("accId") int id){
         return new ResponseEntity<>(accountService.getAccountById(id), HttpStatus.OK);
     }

@@ -46,7 +46,6 @@ public class MovieDirectorServiceImpl implements MovieDirectorService {
 
     @Override
     public MovieDirectorDTO createMovieDirector(MovieDirectorDTO movieDirectorDTO) {
-        System.out.println(movieDirectorDTO.getBirthday());
         if (checkNameInDirector(movieDirectorDTO.getName()) == false) {
             MovieDirector movieDirector = new MovieDirector();
             movieDirector.setAvatar(movieDirectorDTO.getAvatar());
