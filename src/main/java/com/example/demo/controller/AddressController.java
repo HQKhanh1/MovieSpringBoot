@@ -52,6 +52,14 @@ public class AddressController {
     public ResponseEntity<List<TownDTO>> getTownByDistrictId(@PathVariable("districtId") int id) {
         return new ResponseEntity<>(districtService.getTownByDistrictId(id), HttpStatus.OK);
     }
+    @GetMapping("/getTownById/{id}")
+    private ResponseEntity<TownDTO> getTownById(@PathVariable("id") int id) {
+        return new ResponseEntity<>(this.townService.getById(id), HttpStatus.OK);
+    }
+    @GetMapping("/getDistrictById/{id}")
+    private ResponseEntity<DistrictDTO> getDistrictById(@PathVariable("id") int id) {
+        return new ResponseEntity<>(this.districtService.getById(id), HttpStatus.OK);
+    }
 
     @GetMapping("/getAddressByTownId/{id}")
     public ResponseEntity<JSONObject> getAddresNyTownId(@PathVariable("id") int id) {

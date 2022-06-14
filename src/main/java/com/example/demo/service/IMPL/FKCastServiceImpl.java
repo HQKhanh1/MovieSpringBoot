@@ -24,15 +24,15 @@ public class FKCastServiceImpl implements FKCastService {
     private final MovieDetailMap movieDetailMap;
 
     @Override
-    public List<MovieCastDTO> getCastByMovieId(int id) {
-        List<MovieCastDTO> movieCastDTOS = new ArrayList<>();
+    public List<FKCastDTO> getCastByMovieId(int id) {
         List<FKCast> fkCasts = fkCastRepository.findAll();
+        List<FKCastDTO> fkCastDTOS = new ArrayList<>();
         fkCasts.forEach(fkCast -> {
             if (fkCast.getMovieDetail().getId() == id) {
-                movieCastDTOS.add(movieCastMap.movieCastDTO(fkCast.getMovieCast()));
+                fkCastDTOS.add(new FKCastDTO(fkCast.getMovieDetail().getId(), fkCast.getMovieCast().getId(), fkCast.getCastCharacter()));
             }
         });
-        return movieCastDTOS;
+        return fkCastDTOS;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class ImageController {
     }
 
     @PostMapping("/getImage")
-    public ResponseEntity<ImageModel> getImage(@RequestParam("url") String url) {
+    public ResponseEntity<?> getImage(@RequestParam("url") String url) {
         return new ResponseEntity<>(imageService.getImage(url), HttpStatus.OK);
     }
 }

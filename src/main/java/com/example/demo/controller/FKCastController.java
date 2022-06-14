@@ -33,7 +33,7 @@ public class FKCastController {
 
     // get all movie on a cast
     @GetMapping("/cast/{movieId}")
-    public ResponseEntity<List<MovieCastDTO>> getAllCastOnAMovie(@PathVariable int movieId) {
+    public ResponseEntity<List<FKCastDTO>> getAllCastOnAMovie(@PathVariable int movieId) {
         return new ResponseEntity<>(fkCastService.getCastByMovieId(movieId), HttpStatus.OK);
     }
 

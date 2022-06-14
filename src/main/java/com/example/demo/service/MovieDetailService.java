@@ -14,15 +14,15 @@ public interface MovieDetailService {
 
     MovieDetailDTO addMovieDetail(MovieDetail movieDetailDTO) throws Exception;
 
-    MovieDetail editMovieDetail(MovieDetail movieDetailDTO) throws Exception;
+    MovieDetailDTO editMovieDetail(MovieDetail movieDetailDTO) throws Exception;
 
     MovieDetail deleteMovieDetail(int id) throws Exception;
 
     MovieDetail getMovieDetailByTitle(String title);
 
-    List<MovieRate> getListMovieRate();
+    List<MovieRate> getListMovieRate() throws Exception;
 
-    MovieRate getRateMovie(int id);
+    MovieRate getRateMovie(int id) throws Exception;
 
     List<MovieGenreDTO> getMovieGenres(int id);
 

@@ -92,7 +92,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     }
 
     @Override
-    public MovieDetail editMovieDetail(MovieDetail movieDetailDTO) throws Exception {
+    public MovieDetailDTO editMovieDetail(MovieDetail movieDetailDTO) throws Exception {
         assert movieDetailDTO.getId() != null;
         MovieDetail movieDetail = movieDetailRepository.getById(movieDetailDTO.getId());
         if (checkExitTitleEditMovie(movieDetailDTO.getTitle(), movieDetail.getId())) {
@@ -135,24 +135,22 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                 movieDetail.setFkGenres(movieDetailDTO.getFkGenres().stream().map(fkGenre -> {
                     MovieDetail movieDetailGenre = movieDetailRepository.getById(fkGenre.getId().getMovieId());
                     MovieGenre movieGenre = movieGenreRepository.getById(fkGenre.getId().getGenreId());
-                    FKGenre newFKGenre = new FKGenre();
-                    newFKGenre.setMovieDetail(movieDetailGenre);
-                    newFKGenre.setMovieGenre(movieGenre);
-                    return newFKGenre;
+                    fkGenre.setMovieDetail(movieDetailGenre);
+                    fkGenre.setMovieGenre(movieGenre);
+                    return fkGenre;
                 }).collect(Collectors.toList()));
             }
             if (movieDetailDTO.getFkDirectors() != null) {
                 movieDetail.setFkDirectors(movieDetailDTO.getFkDirectors().stream().map(fkDirector -> {
-                    MovieDetail movieDetailCast = movieDetailRepository.getById(fkDirector.getId().getMovieId());
+                    MovieDetail movieDetailDirector = movieDetailRepository.getById(fkDirector.getId().getMovieId());
                     MovieDirector movieDirector = movieDirectorRepository.getById(fkDirector.getId().getDricetorId());
-                    FKDirector newFkDirector = new FKDirector();
-                    newFkDirector.setMovieDetail(movieDetailCast);
-                    newFkDirector.setMovieDirector(movieDirector);
-                    return newFkDirector;
+                    fkDirector.setMovieDetail(movieDetailDirector);
+                    fkDirector.setMovieDirector(movieDirector);
+                    return fkDirector;
                 }).collect(Collectors.toList()));
             }
             movieDetailRepository.save(movieDetail);
-            return movieDetailDTO;
+            return movieDetailMap.movieDetailToDTO(movieDetailDTO);
         }
 
     }
@@ -178,7 +176,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     }
 
     @Override
-    public List<MovieRate> getListMovieRate() {
+    public List<MovieRate> getListMovieRate() throws Exception {
         List<MovieRate> movieRates = new ArrayList<>();
         List<MovieDetail> movieDetails = movieDetailRepository.findAll();
         for (MovieDetail movieDetail : movieDetails) {
@@ -192,23 +190,26 @@ public class MovieDetailServiceImpl implements MovieDetailService {
     }
 
     @Override
-    public MovieRate getRateMovie(int id) {
-        List<MovieEvaluate> movieEvaluates = movieEvaluateService.getMovieEvaluates();
-        int sumRate = 0;
-        int countMovie = 0;
-        MovieDetailDTO movieDetailDTO = new MovieDetailDTO();
-        assert movieEvaluates != null;
-        for (MovieEvaluate movieEvaluate : movieEvaluates) {
-            if (movieEvaluate.getId().getMovieId() == id) {
-                movieDetailDTO = movieDetailMap.movieDetailToDTO(movieEvaluate.getMovieDetail());
-                sumRate += movieEvaluate.getEvaluateRate();
-                countMovie = countMovie + 1;
+    public MovieRate getRateMovie(int id) throws Exception {
+        MovieDetail movieDetail = movieDetailRepository.findById(id).orElse(null);
+        if (movieDetail != null) {
+            List<MovieEvaluate> movieEvaluates = movieEvaluateService.getMovieEvaluates();
+            int sumRate = 0;
+            int countMovie = 0;
+            assert movieEvaluates != null;
+            for (MovieEvaluate movieEvaluate : movieEvaluates) {
+                if (movieEvaluate.getId().getMovieId() == id) {
+                    sumRate += movieEvaluate.getEvaluateRate();
+                    countMovie = countMovie + 1;
+                }
             }
-        }
-        if (countMovie != 0) {
-            return new MovieRate(movieDetailDTO.getId(), ((double) sumRate / (double) countMovie));
+            if (countMovie != 0) {
+                return new MovieRate(movieDetail.getId(), ((double) sumRate / (double) countMovie));
+            } else {
+                return new MovieRate(movieDetail.getId(), 0.0);
+            }
         } else {
-            return new MovieRate(movieDetailDTO.getId(), 0.0);
+            throw new Exception("Movie not found!");
         }
     }
 

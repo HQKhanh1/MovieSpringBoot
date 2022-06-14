@@ -18,7 +18,6 @@
 --
 -- Table structure for table `account_role`
 --
-
 DROP TABLE IF EXISTS `account_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -27,7 +26,7 @@ CREATE TABLE `account_role` (
   `name` varchar(64) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `account_role`
@@ -101,8 +100,9 @@ CREATE TABLE `fk_cast` (
   `cast_id` int NOT NULL,
   `cast_character` varchar(255) NOT NULL,
   PRIMARY KEY (`movie_id`,`cast_id`),
-  KEY `FK2k0bd4njtcjr6l6y2nudmb8ky` (`cast_id`),
-  CONSTRAINT `FK_fk_cast_movie_cast1` FOREIGN KEY (`cast_id`) REFERENCES `movie_cast` (`id`) ON UPDATE CASCADE,
+  KEY `FK_fk_cast_movieCast` (`cast_id`),
+  KEY `FK_fk_cast_movieDetail` (`movie_id`),
+  CONSTRAINT `FK_fk_cast_movieCast` FOREIGN KEY (`cast_id`) REFERENCES `movie_cast` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_fk_cast_movieDetail` FOREIGN KEY (`movie_id`) REFERENCES `moviedetail` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -125,10 +125,10 @@ CREATE TABLE `fk_director` (
   `movie_id` int NOT NULL,
   `dricetor_id` int NOT NULL,
   PRIMARY KEY (`movie_id`,`dricetor_id`),
-  KEY `FKcjnl2ovg894m7c9wefi09acxp` (`dricetor_id`),
-  CONSTRAINT `FK_fk_driector_movie_driector` FOREIGN KEY (`movie_id`) REFERENCES `movie_director` (`id`),
-  CONSTRAINT `FK_fk_driector_movieDetail` FOREIGN KEY (`movie_id`) REFERENCES `moviedetail` (`id`),
-  CONSTRAINT `FKcjnl2ovg894m7c9wefi09acxp` FOREIGN KEY (`dricetor_id`) REFERENCES `movie_director` (`id`)
+  KEY `FK_fk_driector_movieDriector` (`dricetor_id`),
+  KEY `FK_fk_driector_movieDetail` (`movie_id`),
+  CONSTRAINT `FK_fk_driector_movieDriector` FOREIGN KEY (`dricetor_id`) REFERENCES `movie_director` (`id`),
+  CONSTRAINT `FK_fk_driector_movieDetail` FOREIGN KEY (`movie_id`) REFERENCES `moviedetail` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -150,10 +150,10 @@ CREATE TABLE `fk_genre` (
   `movie_id` int NOT NULL,
   `genre_id` int NOT NULL,
   PRIMARY KEY (`movie_id`,`genre_id`),
-  KEY `FKos6xcnxwl2y0xmyvwwq8rllvj` (`genre_id`),
-  CONSTRAINT `FK_fk_genre_movie_genre` FOREIGN KEY (`movie_id`) REFERENCES `movie_genre` (`id`),
-  CONSTRAINT `FK_fk_genre_movieDetail` FOREIGN KEY (`movie_id`) REFERENCES `moviedetail` (`id`),
-  CONSTRAINT `FKos6xcnxwl2y0xmyvwwq8rllvj` FOREIGN KEY (`genre_id`) REFERENCES `movie_genre` (`id`)
+  KEY `FK_fk_genre_movieGenre` (`genre_id`),
+  KEY `FK_fk_genre_movieDetail` (`movie_id`),
+  CONSTRAINT `FK_fk_genre_movieGenre` FOREIGN KEY (`genre_id`) REFERENCES `movie_genre` (`id`),
+  CONSTRAINT `FK_fk_genre_movieDetail` FOREIGN KEY (`movie_id`) REFERENCES `moviedetail` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -179,9 +179,10 @@ CREATE TABLE `move_evaluate` (
   `evaluate_content` varchar(4000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `evaluate_rate` int NOT NULL,
   PRIMARY KEY (`id_user`,`id_movie`),
-  KEY `FK_move_evaluate_movieDetail1` (`id_movie`),
+  KEY `FK_move_evaluate_movieDetail` (`id_movie`),
+  KEY `FK_move_evaluate_movie_account` (`id_user`),
   CONSTRAINT `FK_move_evaluate_movie_account` FOREIGN KEY (`id_user`) REFERENCES `movie_account` (`movie_acc_id`) ON UPDATE CASCADE,
-  CONSTRAINT `FK_move_evaluate_movieDetail1` FOREIGN KEY (`id_movie`) REFERENCES `moviedetail` (`id`) ON UPDATE CASCADE
+  CONSTRAINT `FK_move_evaluate_movieDetail` FOREIGN KEY (`id_movie`) REFERENCES `moviedetail` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -367,6 +368,7 @@ CREATE TABLE `role_for_account` (
   `id_acc` int NOT NULL,
   PRIMARY KEY (`id_role`,`id_acc`),
   KEY `FK_role_for_account_movie_account` (`id_acc`),
+  KEY `FK_role_for_account_account_role` (`id_role`),
   CONSTRAINT `FK_role_for_account_account_role` FOREIGN KEY (`id_role`) REFERENCES `account_role` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `FK_role_for_account_movie_account` FOREIGN KEY (`id_acc`) REFERENCES `movie_account` (`movie_acc_id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

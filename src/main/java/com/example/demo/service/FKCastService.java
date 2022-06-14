@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface FKCastService {
     //get all cast on a movie
-    List<MovieCastDTO> getCastByMovieId(int movieDetailId);
+    List<FKCastDTO> getCastByMovieId(int movieDetailId);
 
     //get all movie on a cast
     List<MovieDetailDTO> getMovieDetailByCastId(int castId);

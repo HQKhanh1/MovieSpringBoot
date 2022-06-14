@@ -35,12 +35,12 @@ public class MovieDetailController {
     }
 
     @GetMapping("/getMovieRates")
-    public ResponseEntity<List<MovieRate>> getMovierates() {
+    public ResponseEntity<List<MovieRate>> getMovierates() throws Exception {
         return new ResponseEntity<>(movieDetailService.getListMovieRate(), HttpStatus.OK);
     }
 
     @GetMapping("/getMovieRate/{id}")
-    public ResponseEntity<MovieRate> getMovierate(@PathVariable int id) {
+    public ResponseEntity<MovieRate> getMovierate(@PathVariable int id) throws Exception {
         return new ResponseEntity<>(movieDetailService.getRateMovie(id), HttpStatus.OK);
     }
 
@@ -65,9 +65,10 @@ public class MovieDetailController {
     }
 
     @PutMapping("/editMovieDetail")
-    public ResponseEntity<MovieDetail> editMovieDetail(@RequestBody MovieDetail movieDetailDTO) throws Exception {
+    public ResponseEntity<MovieDetailDTO> editMovieDetail(@RequestBody MovieDetail movieDetailDTO) throws Exception {
         return new ResponseEntity<>(movieDetailService.editMovieDetail(movieDetailDTO), HttpStatus.OK);
     }
+
     @PutMapping("/saveEvaluate")
     public ResponseEntity<MovieEvaluateDTO> saveEvaluate(@RequestBody MovieEvaluateDTO movieEvaluateDTO) throws Exception {
         return new ResponseEntity<>(movieDetailService.saveEvaluate(movieEvaluateDTO), HttpStatus.OK);
