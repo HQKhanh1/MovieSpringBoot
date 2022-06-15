@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.DTO.MovieDetailDTO;
 import com.example.demo.DTO.MovieDirectorDTO;
+import com.example.demo.model.FKDirector;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface FKDirectorService {
     void deleteFkDirectorByDirectorId(int directorId);
 
     void deleteFkDirectorByMovieId(int movieDetailId);
+
+    void removieDirectorExits(Integer movieId);
 }

@@ -5,6 +5,7 @@ import com.example.demo.DTO.MovieDirectorDTO;
 import com.example.demo.map.MovieDetailMap;
 import com.example.demo.map.MovieDirectorMap;
 import com.example.demo.model.FKDirector;
+import com.example.demo.model.FKGenre;
 import com.example.demo.repository.FKDirectorRepository;
 import com.example.demo.service.FKDirectorService;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class FKDirectorServiceImpl implements FKDirectorService {
         List<MovieDirectorDTO> movieDirectorDTOS = new ArrayList<>();
         List<FKDirector> fkDirectors = fkDirectorRepository.findAll();
         fkDirectors.forEach(fkDirector -> {
-            if (fkDirector.getMovieDetail().getId() == movieDetailId){
+            if (fkDirector.getMovieDetail().getId() == movieDetailId) {
                 movieDirectorDTOS.add(movieDirectorMap.movieDirectorToDTO(fkDirector.getMovieDirector()));
             }
         });
@@ -63,4 +64,15 @@ public class FKDirectorServiceImpl implements FKDirectorService {
             }
         });
     }
+
+    @Override
+    public void removieDirectorExits(Integer movieId) {
+        List<FKDirector> fkDirectorsPresent = fkDirectorRepository.findAll();
+        for (FKDirector director : fkDirectorsPresent) {
+            if (director.getId().getMovieId() == movieId) {
+                fkDirectorRepository.delete(director);
+            }
+        }
+    }
+
 }

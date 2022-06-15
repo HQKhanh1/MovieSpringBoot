@@ -71,4 +71,14 @@ public class FKCastServiceImpl implements FKCastService {
     public List<FKCastDTO> getAllFKCast() {
         return fkCastMap.fkCastDTOList(fkCastRepository.findAll());
     }
+
+    @Override
+    public void removeFkCastExits(Integer movieId) {
+        List<FKCast> fkCastsPresent = fkCastRepository.findAll();
+        for (FKCast cast : fkCastsPresent) {
+            if (cast.getId().getMovieId() == movieId) {
+                fkCastRepository.delete(cast);
+            }
+        }
+    }
 }

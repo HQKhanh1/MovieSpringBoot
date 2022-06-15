@@ -20,8 +20,8 @@ public class MovieEvaluateMap {
     private final AccountRepository accountRepository;
 
     public MovieEvaluateDTO movieEvaluateToDTO(MovieEvaluate movieEvaluate) {
-        return new MovieEvaluateDTO(movieEvaluate.getMovieDetail().getId(),
-                movieEvaluate.getAccountDetail().getId(),
+        return new MovieEvaluateDTO(movieDetailMap.movieDetailToDTO(movieEvaluate.getMovieDetail()),
+                accountMap.accountToDTO(movieEvaluate.getAccountDetail()),
                 movieEvaluate.getEvaluateTime(),
                 movieEvaluate.getEvaluateContent(),
                 movieEvaluate.getEvaluateRate());
@@ -29,10 +29,10 @@ public class MovieEvaluateMap {
 
     public MovieEvaluate dTOToMovieEvaluate(MovieEvaluateDTO movieEvaluateDTO) {
         return new MovieEvaluate(
-                new MovieEvaluateKey(movieEvaluateDTO.getAccId(),
-                        movieEvaluateDTO.getMovieId()),
-                accountRepository.getById(movieEvaluateDTO.getAccId()),
-                movieDetailRepository.getById(movieEvaluateDTO.getMovieId()),
+                new MovieEvaluateKey(movieEvaluateDTO.getAccId().getId(),
+                        movieEvaluateDTO.getMovieId().getId()),
+                accountRepository.getById(movieEvaluateDTO.getAccId().getId()),
+                movieDetailRepository.getById(movieEvaluateDTO.getMovieId().getId()),
                 movieEvaluateDTO.getEvaluateTime(),
                 movieEvaluateDTO.getEvaluateContent(),
                 movieEvaluateDTO.getEvaluateRate());

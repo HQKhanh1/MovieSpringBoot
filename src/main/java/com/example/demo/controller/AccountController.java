@@ -43,8 +43,12 @@ public class AccountController {
     }
 
     @GetMapping("/getAccoutByUsername/{username}")
-    public ResponseEntity<AccountDTO> getAccout(@PathVariable String username) {
+    public ResponseEntity<AccountDTO> getAccount(@PathVariable String username) {
         return new ResponseEntity<>(accountService.getAccountByUsernameDTO(username), HttpStatus.OK);
+    }
+    @GetMapping("/getAllAccount")
+    public ResponseEntity<?> getAllAccount() {
+        return new ResponseEntity<>(accountService.getAllAccounts(), HttpStatus.OK);
     }
     @GetMapping("/getAccById/{accId}")
     public ResponseEntity<AccountDTO> getAccById(@PathVariable("accId") int id){

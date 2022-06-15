@@ -2,12 +2,14 @@ package com.example.demo.map;
 
 import com.example.demo.DTO.AccountDTO;
 import com.example.demo.model.Account;
+import com.example.demo.model.RoleForAccount;
 import com.example.demo.repository.address.TownRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @AllArgsConstructor
@@ -15,7 +17,12 @@ public class AccountMap {
     private final TownRepository townRepository;
 
     public AccountDTO accountToDTO(Account account) {
-        return new AccountDTO(account.getId(),
+        List<String> roles = new ArrayList<>();
+        for (RoleForAccount roleForAccount : account.getAccountRoles()) {
+            roles.add(roleForAccount.getAccountRole().getName().substring(5).toLowerCase(Locale.ROOT));
+        }
+        return new AccountDTO(
+                account.getId(),
                 account.getUsername(),
                 account.getPassword(),
                 account.isEnabled(),
@@ -27,7 +34,8 @@ public class AccountMap {
                 account.getIdTown().getId(),
                 account.getAddress(),
                 account.getPhoneNumber(),
-                account.isGender());
+                account.isGender(),
+                roles);
     }
 
     public Account DTOToAccount(AccountDTO accountDTO) {
@@ -49,9 +57,9 @@ public class AccountMap {
 
     public List<AccountDTO> listAccountToListDTO(List<Account> accounts) {
         List<AccountDTO> accountDTOS = new ArrayList<>();
-        accounts.forEach(account -> {
+        for (Account account : accounts) {
             accountDTOS.add(this.accountToDTO(account));
-        });
+        }
         return accountDTOS;
     }
 }

@@ -121,6 +121,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                 }).collect(Collectors.toList()));
             }
             if (movieDetailDTO.getFkCasts() != null) {
+                fkCastService.removeFkCastExits(movieDetailDTO.getId());
                 movieDetail.setFkCasts(movieDetailDTO.getFkCasts().stream().map(fkCast -> {
                     MovieDetail movieDetailCast = movieDetailRepository.getById(fkCast.getId().getMovieId());
                     MovieCast movieCast = movieCastRepository.getById(fkCast.getId().getCastId());
@@ -132,6 +133,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                 }).collect(Collectors.toList()));
             }
             if (movieDetailDTO.getFkGenres() != null) {
+                fkGenreService.removeGenreExits(movieDetailDTO.getId());
                 movieDetail.setFkGenres(movieDetailDTO.getFkGenres().stream().map(fkGenre -> {
                     MovieDetail movieDetailGenre = movieDetailRepository.getById(fkGenre.getId().getMovieId());
                     MovieGenre movieGenre = movieGenreRepository.getById(fkGenre.getId().getGenreId());
@@ -141,6 +143,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                 }).collect(Collectors.toList()));
             }
             if (movieDetailDTO.getFkDirectors() != null) {
+                fkDirectorService.removieDirectorExits(movieDetailDTO.getId());
                 movieDetail.setFkDirectors(movieDetailDTO.getFkDirectors().stream().map(fkDirector -> {
                     MovieDetail movieDetailDirector = movieDetailRepository.getById(fkDirector.getId().getMovieId());
                     MovieDirector movieDirector = movieDirectorRepository.getById(fkDirector.getId().getDricetorId());
@@ -272,7 +275,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
 
     @Override
     public MovieEvaluateDTO saveEvaluate(MovieEvaluateDTO movieEvaluateDTO) {
-        MovieDetail movieDetail = movieDetailRepository.getById(movieEvaluateDTO.getMovieId());
+        MovieDetail movieDetail = movieDetailRepository.getById(movieEvaluateDTO.getMovieId().getId());
         MovieEvaluate movieEvaluate = movieEvaluateMap.dTOToMovieEvaluate(movieEvaluateDTO);
         List<MovieEvaluate> movieEvaluates = new ArrayList<>();
         if (movieDetail.getMovieEvaluates() != null) {

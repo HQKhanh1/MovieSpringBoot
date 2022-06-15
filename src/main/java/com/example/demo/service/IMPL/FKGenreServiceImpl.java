@@ -88,4 +88,14 @@ public class FKGenreServiceImpl implements FKGenreService {
             }
         });
     }
-}
+
+    @Override
+    public void removeGenreExits(Integer movieId) {
+        List<FKGenre> fkGenresPresent = fkGenreRepository.findAll();
+            for (FKGenre genre : fkGenresPresent) {
+                if (genre.getId().getMovieId() == movieId) {
+                    fkGenreRepository.delete(genre);
+                }
+            }
+        }
+    }
