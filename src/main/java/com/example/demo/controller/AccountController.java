@@ -67,7 +67,7 @@ public class AccountController {
     }
 
     @DeleteMapping("/deleteAcc/{username}")
-    public ResponseEntity<String> deleteAccountByUsername(@PathVariable String username) {
+    public ResponseEntity<?> deleteAccountByUsername(@PathVariable String username) {
         return new ResponseEntity<>(accountService.deleteAccountByUsername(username), HttpStatus.OK);
     }
 

@@ -130,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
             movieEvaluateService.deleteMovieEvaluateByUserId(id);
             roleForAccountService.deleteRole(id);
             accountRepository.delete(account);
-            return "Remove Account Successfully";
+            return "Remove Account Successfully!";
         }
     }
 
