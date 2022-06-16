@@ -33,9 +33,9 @@ public class AccountController {
         return accountService.getAllUsersPage(pageNo, pageSize, sortBy, sortDir);
     }
 
-    @PostMapping("/createAcc")
-    public ResponseEntity<Account> createNewAccount(@RequestBody @Valid Account account) throws UsernameExitException, MailException {
-        return new ResponseEntity<>(accountService.createAccount(account), HttpStatus.CREATED);
+    @PostMapping("/createAcc/{roleId}")
+    public ResponseEntity<?> createNewAccount(@RequestBody @Valid Account account, @PathVariable("roleId") int roleId) throws UsernameExitException, MailException {
+        return new ResponseEntity<>(accountService.createAccount(account, roleId), HttpStatus.CREATED);
     }
     @PutMapping("/saveImageAccount/{accId}")
     public ResponseEntity<Boolean> saveImageAccount(@RequestParam("image")MultipartFile image, @PathVariable("accId") int accId) {

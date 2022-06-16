@@ -119,7 +119,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String deleteAccountByUsername(String username) {
+    public AccountDTO deleteAccountByUsername(String username) {
         Account account = accountRepository.findMovieAccountByUsername(username);
         if (account == null) {
             throw new AccountExeption("Account not found with username: " + username);
@@ -130,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
             movieEvaluateService.deleteMovieEvaluateByUserId(id);
             roleForAccountService.deleteRole(id);
             accountRepository.delete(account);
-            return "Remove Account Successfully!";
+            return accountMap.accountToDTO(account);
         }
     }
 
@@ -182,15 +182,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account createAccount(Account accountCreate) throws
+    public AccountDTO createAccount(Account accountCreate, int roleId) throws
             MailException, UsernameExitException {
+        Account account = new Account();
         //check mail bang fasle => email không tồn tại
         if (this.checkEmail(accountCreate.getEmail(), accountCreate.getUsername()) == false
                 && this.checkUsername(accountCreate.getUsername()) == false) {
             String gPass = DataUtils.generateTempPwd(8);
-            Account account = new Account();
             account.setUsername(accountCreate.getUsername());
-            account.setPassword(gPass);
+            account.setPassword(passwordEncoder.encode(gPass));
             account.setEmail(accountCreate.getEmail());
             account.setLastname(accountCreate.getLastname());
             account.setFirstname(accountCreate.getFirstname());
@@ -199,7 +199,7 @@ public class AccountServiceImpl implements AccountService {
             account.setAvatar(null);
             account.setIdTown(accountCreate.getIdTown());
             account.setAddress(accountCreate.getAddress());
-            account.setEnabled(true);
+            account.setEnabled(accountCreate.isEnabled());
             accountRepository.save(account);
             account.setVerificationTokens(accountCreate.getVerificationTokens().stream().map(
                     (verificationToken -> {
@@ -211,9 +211,12 @@ public class AccountServiceImpl implements AccountService {
                         return verificationTokenNew;
                     })
             ).collect(Collectors.toList()));
+            roleForAccountService.addRoleForAccount(
+                    accountRepository.findMovieAccountByUsername(accountCreate.getUsername()),
+                    accountRoleRepository.getById(roleId));
             accountRepository.save(account);
-//            sendMailService.create(account, gPass);
-            return account;
+            sendMailService.create(account, gPass);
+            return accountMap.accountToDTO(account);
         }
         return null;
     }

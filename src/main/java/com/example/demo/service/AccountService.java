@@ -28,11 +28,11 @@ public interface AccountService {
 
     Boolean changePasswordForAccount(Account account, String passwordChange);
 
-    String deleteAccountByUsername(String username);
+    AccountDTO deleteAccountByUsername(String username);
 
     AccountDTO editAccountByUsername(AccountDTO account) throws UsernameExitException, MailException;
 
-    Account createAccount(Account account) throws MailException, UsernameExitException;
+    AccountDTO createAccount(Account account, int roleId) throws MailException, UsernameExitException;
 
     AccountPage getAllUsersPage(int pageNo, int pageSize, String sortBy, String sortDir);
 

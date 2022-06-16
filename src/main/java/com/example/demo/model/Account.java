@@ -32,8 +32,8 @@ public class Account implements Serializable {
     @NotBlank(message = "Password cannot be empty")
     private String password;
 
-    @Column(name = "enabled", nullable = false)
-    private boolean enabled = false;
+    @Column(name = "enabled")
+    private boolean enabled;
 
     @Column(name = "email", unique = true)
     @NotBlank(message = "Email cannot be empty")
