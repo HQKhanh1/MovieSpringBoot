@@ -1,5 +1,6 @@
 package com.example.demo.DTO;
 
+import com.example.demo.model.AccountRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,5 @@ public class AccountDTO {
     private String address;
     private String phoneNumber;
     private Boolean gender;
-    private List<String> roles;
+    private List<AccountRoleDTO> roles;
 }

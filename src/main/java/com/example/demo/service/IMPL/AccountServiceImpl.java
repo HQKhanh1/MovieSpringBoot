@@ -176,6 +176,14 @@ public class AccountServiceImpl implements AccountService {
             if (accountDTO.getGender() != null && (accountDTO.getGender() != account.isGender())) {
                 account.setGender(accountDTO.getGender());
             }
+            if (accountDTO.getRoles() != null) {
+                roleForAccountService.deleteRole(accountDTO.getId());
+                List<RoleForAccount> roleForAccount = accountDTO.getRoles().stream().map((accountRoleDTO -> {
+                    RoleForAccount roleForAccount1 = new RoleForAccount(new RoleForAccountKey(accountDTO.getId(), accountRoleDTO.getId()), accountRepository.getById(accountDTO.getId()), accountRoleRepository.getById(accountRoleDTO.getId()));
+                    return roleForAccount1;
+                })).collect(Collectors.toList());
+                account.setAccountRoles(roleForAccount);
+            }
             accountRepository.save(account);
             return accountDTO;
         }

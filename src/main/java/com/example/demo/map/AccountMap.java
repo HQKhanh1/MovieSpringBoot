@@ -1,7 +1,9 @@
 package com.example.demo.map;
 
 import com.example.demo.DTO.AccountDTO;
+import com.example.demo.DTO.AccountRoleDTO;
 import com.example.demo.model.Account;
+import com.example.demo.model.AccountRole;
 import com.example.demo.model.RoleForAccount;
 import com.example.demo.repository.address.TownRepository;
 import lombok.AllArgsConstructor;
@@ -17,9 +19,9 @@ public class AccountMap {
     private final TownRepository townRepository;
 
     public AccountDTO accountToDTO(Account account) {
-        List<String> roles = new ArrayList<>();
+        List<AccountRoleDTO> roles = new ArrayList<>();
         for (RoleForAccount roleForAccount : account.getAccountRoles()) {
-            roles.add(roleForAccount.getAccountRole().getName().substring(5).toLowerCase(Locale.ROOT));
+            roles.add(new AccountRoleDTO(roleForAccount.getAccountRole().getId(), roleForAccount.getAccountRole().getName()));
         }
         return new AccountDTO(
                 account.getId(),
